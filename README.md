@@ -14,6 +14,10 @@ To inspect the available skills first:
 npx skills add ExtraBrainApp/ExtraBrain-skills --list
 ```
 
-The `use-extrabrain` skill guides an agent through ExtraBrain's authenticated MCP server and paired local document CLI. ExtraBrain must be running for app operations. The CLI document route requires a build that includes the CLI and access to the same filesystem as the files being imported.
+The `use-extrabrain` skill uses the standalone [ExtraBrain CLI](https://github.com/ExtraBrainApp/ExtraBrain-cli) to import, list, search, read, export, and delete reference documents. It also covers pairing, capability discovery, and updating the CLI itself.
+
+Install the CLI using its repository's installation instructions. Document operations require a running ExtraBrain app with local document automation enabled, an approved CLI connection, and access to the same filesystem as the files being imported. The CLI currently supports macOS arm64 and x64 releases.
+
+The skill follows the commands available in the CLI. Session preparation, recording controls, profiles, history, settings, and desktop app updates are outside its current scope.
 
 The skill was extracted from [ExtraBrain PR #985](https://github.com/ExtraBrainApp/ExtraBrain/pull/985).
