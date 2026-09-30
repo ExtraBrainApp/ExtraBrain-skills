@@ -1,0 +1,15 @@
+interface:
+  display_name: "Use ExtraBrain"
+  short_description: "Prepare and control ExtraBrain sessions safely"
+  default_prompt: "Use $use-extrabrain to prepare my next ExtraBrain session."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "extrabrain"
+      description: "Authenticated local ExtraBrain session and app controls"
+      transport: "streamable_http"
+      url: "http://127.0.0.1:37373/mcp"
+
+policy:
+  allow_implicit_invocation: true
