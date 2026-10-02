@@ -1,7 +1,7 @@
 interface:
   display_name: "Use ExtraBrain"
-  short_description: "Manage ExtraBrain documents through the CLI"
-  default_prompt: "Use $use-extrabrain to import my reference documents into ExtraBrain."
+  short_description: "Manage documents and analyze sessions via CLI"
+  default_prompt: "Use $use-extrabrain to review my latest completed session for action items."
 
 policy:
   allow_implicit_invocation: true
