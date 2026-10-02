@@ -1,0 +1,7 @@
+interface:
+  display_name: "ExtraBrain Extract Action Items"
+  short_description: "Find commitments in session evidence"
+  default_prompt: "Use $extrabrain-extract-action-items to extract my commitments from the latest completed session."
+
+policy:
+  allow_implicit_invocation: true

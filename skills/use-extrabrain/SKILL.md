@@ -1,13 +1,11 @@
 ---
 name: use-extrabrain
-description: "Use the standalone extrabrain CLI for ExtraBrain reference documents and read-only session evidence. Use for document operations, built-in or custom session insights, pairing, capability discovery, or CLI updates."
+description: "Manage ExtraBrain reference documents through the standalone extrabrain CLI. Use for importing local files, checking import progress, listing or searching documents, reading extracted text, exporting originals, deleting a document, pairing the CLI, or updating the CLI itself."
 ---
 
 # Use ExtraBrain
 
-Use the first-party `extrabrain` CLI for reference documents, read-only session evidence,
-agent-generated session insights, pairing, capability discovery, and updates. Session preparation,
-recording controls, profiles, history, settings, and desktop app updates require the ExtraBrain app UI.
+Use the first-party `extrabrain` CLI for reference documents, pairing, capability discovery, and updates. Session preparation, recording controls, profiles, history, settings, and desktop app updates require the ExtraBrain app UI.
 
 ## Establish the CLI contract
 
@@ -48,13 +46,6 @@ document extractor to bypass the CLI.
 
 If the CLI or app API is unavailable, explain the reported limitation. For file imports,
 the user can use Settings > Personalization > Reference Documents and the native file picker.
-
-## Generate session insights
-
-Generate insights yourself from read-only session evidence. Do not ask the app to generate or save
-an insight, change settings, or save a template unless the user separately authorizes it. Read
-[references/session-insights.md](references/session-insights.md) for session selection and
-retrieval, all five built-in mappings, custom template semantics, and compatibility limits.
 
 ## Update the CLI
 
