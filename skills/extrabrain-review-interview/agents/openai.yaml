@@ -1,0 +1,7 @@
+interface:
+  display_name: "ExtraBrain Review Interview"
+  short_description: "Improve interview answers"
+  default_prompt: "Use $extrabrain-review-interview to review my latest completed interview session."
+
+policy:
+  allow_implicit_invocation: true

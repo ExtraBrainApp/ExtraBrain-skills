@@ -5,9 +5,7 @@ description: "Manage ExtraBrain reference documents through the standalone extra
 
 # Use ExtraBrain
 
-Use the first-party `extrabrain` CLI. Its current commands cover reference documents,
-pairing, capability discovery, and CLI updates. Session preparation, recording controls,
-profiles, history, settings, and desktop app updates require the ExtraBrain app UI.
+Use the first-party `extrabrain` CLI for reference documents, pairing, capability discovery, and updates. Session preparation, recording controls, profiles, history, settings, and desktop app updates require the ExtraBrain app UI.
 
 ## Establish the CLI contract
 

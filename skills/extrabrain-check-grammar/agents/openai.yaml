@@ -1,0 +1,7 @@
+interface:
+  display_name: "ExtraBrain Check Grammar"
+  short_description: "Improve grammar from session speech"
+  default_prompt: "Use $extrabrain-check-grammar to review my latest completed session."
+
+policy:
+  allow_implicit_invocation: true

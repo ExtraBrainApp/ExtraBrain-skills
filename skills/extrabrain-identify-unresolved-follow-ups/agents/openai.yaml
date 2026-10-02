@@ -1,0 +1,7 @@
+interface:
+  display_name: "ExtraBrain Identify Unresolved Follow-ups"
+  short_description: "Find high-impact open follow-ups"
+  default_prompt: "Use $extrabrain-identify-unresolved-follow-ups to find open follow-ups in my latest completed session."
+
+policy:
+  allow_implicit_invocation: true

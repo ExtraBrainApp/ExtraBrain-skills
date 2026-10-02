@@ -1,0 +1,7 @@
+interface:
+  display_name: "ExtraBrain Review Communication"
+  short_description: "Improve meeting communication"
+  default_prompt: "Use $extrabrain-review-communication to review how I communicated in my latest completed session."
+
+policy:
+  allow_implicit_invocation: true
