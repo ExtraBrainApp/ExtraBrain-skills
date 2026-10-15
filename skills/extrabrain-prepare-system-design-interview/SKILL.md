@@ -47,8 +47,15 @@ Write each problem with the structure in
 fits this company and cite the sources behind that link. Present problems as likely practice
 topics, never as confirmed interview questions, unless a cited report shows the company asked it.
 
-Write the files to a new private directory outside the repository, for example
-`$TMPDIR/extrabrain-sd-prep/<company-slug>-<YYYYMMDD>/`, using UTF-8 Markdown:
+Write the files to a new private directory outside the repository, using UTF-8 Markdown:
+
+```sh
+mkdir -p -m 700 "${TMPDIR:-/tmp}/extrabrain-sd-prep"
+mkdir -m 700 "${TMPDIR:-/tmp}/extrabrain-sd-prep/<company-slug>-<YYYYMMDD>"
+```
+
+If that directory already exists, add a suffix such as `-2` instead of reusing it.
+The directory should contain:
 
 - `00-<company-slug>-company-brief.md` - products, scale, engineering signals, sources, and a
   one-line summary of each problem.
@@ -83,8 +90,12 @@ Use `--json` for every CLI command except `--version`; results use the envelope
    to confirm transfer, then `extrabrain --json documents list` and filter by that `groupId` to
    confirm each document has `extractionStatus` `completed`. If any is still pending, recheck a
    few times over about a minute; report a failed or still-pending document by name.
-5. When `indexedSearch` is advertised, run one search for a key term from the first problem and
-   confirm a result has the new group's `groupId`.
+5. When `indexedSearch` is advertised, search for a key term from the first problem and
+   confirm a result has the new group's `groupId`:
+
+   ```sh
+   extrabrain --json documents search --limit 10 "<key term>"
+   ```
 
 If the CLI is missing, the app is not running (exit code `3`), or a capability is not
 advertised, still deliver the files and tell the user to import them in
