@@ -6,8 +6,9 @@ is minor and what you would do anyway. Never omit it.
 
 ## Completion checklist
 
-Every item is mandatory. `scripts/validate_prep.py` checks the same items automatically when
-Python 3 is available; otherwise check each one by hand for every file.
+Every item is mandatory. `scripts/validate_prep.py` checks the structural items automatically
+when Python 3 is available; otherwise check each one by hand for every file. No script checks the
+technical consistency items: review them yourself for every file.
 
 Directory:
 
@@ -40,6 +41,32 @@ Each problem file:
 Brief and problem files:
 
 - [ ] Sources section with URLs, and every `[S#]` cited in the file listed there.
+
+Technical consistency, for each problem file:
+
+- [ ] Every table, field, status value, and index that the API, flows, deep dives, or follow-ups
+      use is defined in the data model under the same name, and every API write maps to a write
+      in that schema.
+- [ ] Every uniqueness or dedupe guarantee is enforceable as written in the chosen store. In
+      PostgreSQL, a unique or exclusion constraint on a partitioned table must include the
+      partition key, and a sharded store (for example Citus) needs the distribution column in
+      it. Global uniqueness across partitions or shards needs its own keyed table or a different
+      key.
+- [ ] The idempotency key described in the API has the same components as the stored unique key
+      that enforces it, including any version or reschedule component.
+- [ ] Every state machine is closed: each status a flow sets exists in the schema, and every
+      retry, sweeper, lease, and crash point leaves no lost and no duplicated side effect. Say
+      where the at-least-once boundary and the dedupe check are.
+- [ ] Database claims are valid: partial index and constraint predicates are immutable (no
+      `now()`), a failed statement aborts a PostgreSQL transaction unless a savepoint is used,
+      and claimed product features (for example task deletion by name) are described correctly.
+- [ ] Every estimation chain is recomputed. Each quantity has one value across sections and
+      files, and 10× figures are derived from the stated base figures.
+
+Company brief:
+
+- [ ] Its one-line case summaries and "decisions to memorize" match the final case files
+      exactly: endpoint paths, table names, keys, indexes, and numbers.
 
 ## Write for live retrieval
 
