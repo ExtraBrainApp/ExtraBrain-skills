@@ -10,12 +10,28 @@ A skill is a small set of instructions that teaches your AI assistant how to do 
 
 1. **The ExtraBrain app**, installed and running on your computer. Get it at [extrabrain.app](https://extrabrain.app).
 2. **An AI assistant that supports skills**, such as Claude Code or Codex.
-3. **The ExtraBrain command-line tool.** Your assistant uses it to talk to the app. Follow the [installation instructions](https://github.com/ExtraBrainApp/ExtraBrain-cli) on its page. It works on Mac only (Apple Silicon and Intel).
+3. **The ExtraBrain command-line tool.** Your assistant uses it to talk to the app. It is installed with one command in "How to install" below. It works on Mac only (Apple Silicon and Intel).
 4. **Node.js**, which provides the `npx` command used in the install step below. Get it from [nodejs.org](https://nodejs.org).
 
 ## How to install
 
-Open the Terminal app on your Mac and run:
+Open the Terminal app on your Mac and follow these two steps.
+
+### Step 1: Install the ExtraBrain command-line tool
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/ExtraBrainApp/ExtraBrain-cli/master/install.sh | bash
+```
+
+This needs no administrator password. When it finishes, open a new Terminal window and check that it worked:
+
+```sh
+extrabrain --version
+```
+
+If it prints a version number, you are set. To update the tool later, run `extrabrain update`.
+
+### Step 2: Install the skills
 
 ```sh
 npx skills add ExtraBrainApp/ExtraBrain-skills
