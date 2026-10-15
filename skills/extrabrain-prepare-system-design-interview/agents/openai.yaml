@@ -1,6 +1,6 @@
 interface:
   display_name: "ExtraBrain Prepare System Design Interview"
-  short_description: "Prepare company-specific system design problems"
+  short_description: "Prepare and practise company-specific system design cases"
   default_prompt: "Use $extrabrain-prepare-system-design-interview to prepare me for a system design interview at Preply."
 
 policy:

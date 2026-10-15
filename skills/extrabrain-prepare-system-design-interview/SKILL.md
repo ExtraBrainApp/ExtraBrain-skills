@@ -1,13 +1,13 @@
 ---
 name: extrabrain-prepare-system-design-interview
-description: "Prepare for a system design interview at a named company. Researches the company's products and engineering, writes five likely company-specific system design problems with model solutions, and imports them into ExtraBrain as a document group through the extrabrain CLI. Use when the user names a company and asks for system design interview prep, practice problems, or likely design questions."
+description: "Prepare for a system design interview at a named company. Researches the company's products and engineering, writes five likely company-specific system design cases with full model answers (API, data model, architecture, storage, scaling, and more), imports them into ExtraBrain as a document group through the extrabrain CLI, sets up the System Design profile, and coaches the user through the cases. Use when the user names a company and asks for system design interview prep, practice problems, or likely design questions."
 ---
 
 # ExtraBrain Prepare System Design Interview
 
-Turn a company name into five realistic system design problems grounded in what that company
-actually builds, then load them into ExtraBrain so they are searchable during practice and the
-live interview.
+Turn a company name into five realistic system design cases grounded in what that company
+actually builds, load them into ExtraBrain as live interview context, and prepare the user to
+answer them.
 
 ## Inputs
 
@@ -42,9 +42,14 @@ different design skills, such as consistency and concurrency, real-time delivery
 ranking, data pipelines and analytics, payments and ledgers, media, or multi-region availability.
 Order them from most to least likely. Calibrate depth to the user's level when known.
 
-Write each problem with the structure in
-[references/problem-template.md](references/problem-template.md). Every problem must state why it
-fits this company and cite the sources behind that link. Present problems as likely practice
+Every problem file must follow [references/problem-template.md](references/problem-template.md)
+completely. This is mandatory: each case must cover, with concrete company-specific content,
+clarifying questions, requirements, scale estimation, the API, the data model and schema,
+storage choices, the service architecture with a D2 diagram and request flows, consistency,
+caching, sharding and replication, queues, search, security and rate limiting, monitoring,
+deep dives, trade-offs, follow-up questions with answers, and a timed 45-minute walkthrough.
+Never shorten a case by dropping a section; write all five at the same depth. Each problem
+must state why it fits this company and cite its sources. Present problems as likely practice
 topics, never as confirmed interview questions, unless a cited report shows the company asked it.
 
 Write the files to a new private directory outside the repository, using UTF-8 Markdown:
@@ -55,14 +60,26 @@ mkdir -m 700 "${TMPDIR:-/tmp}/extrabrain-sd-prep/<company-slug>-<YYYYMMDD>"
 ```
 
 If that directory already exists, add a suffix such as `-2` instead of reusing it.
-The directory should contain:
+The directory must contain exactly these six files:
 
-- `00-<company-slug>-company-brief.md` - products, scale, engineering signals, sources, and a
-  one-line summary of each problem.
-- `01-<company-slug>-<problem-slug>.md` through `05-<company-slug>-<problem-slug>.md` - one file
-  per problem. ExtraBrain derives display names from file names, so keep the company slug in
-  them. Start each file with the company name and problem title so search snippets stay
-  self-explanatory.
+- `00-<company-slug>-company-brief.md`, starting with `# <Company>: ...`, with these `##`
+  sections in order: `What <Company> builds`, `Scale`, `Engineering signals`,
+  `Interview format`, `The five practice problems` (a numbered list of five, one line each on
+  why it fits), `Preparation plan`, and `Sources`. The preparation plan schedules practice up to
+  the interview date when known, lists for each case the decisions to memorize (core endpoints,
+  main tables and keys, store choices, the hardest deep dive), and explains how to use
+  ExtraBrain during the interview (see below).
+- `01-<company-slug>-<problem-slug>.md` through `05-<company-slug>-<problem-slug>.md`, one per
+  problem. ExtraBrain derives display names from file names, so keep the company slug in them.
+
+Then validate the directory and fix every reported problem before importing:
+
+```sh
+python3 -I <this-skill-directory>/scripts/validate_prep.py "<prep-directory>"
+```
+
+Repeat until it prints `OK`. The script checks structure; also reread each API, data model, and
+architecture section yourself to confirm it is specific to this company's product.
 
 ## Import into ExtraBrain
 
@@ -77,11 +94,11 @@ Use `--json` for every CLI command except `--version`; results use the envelope
    new set to it, or import it under a dated name such as
    `<Company> system design interview (YYYY-MM-DD)`. Do not delete older documents unless the
    user explicitly asks.
-3. Import all six files in one batch:
+3. Import all six validated files in one batch:
 
    ```sh
    extrabrain --json documents import --group "<Company> system design interview" -- \
-     "/abs/path/00-<company-slug>-company-brief.md" "/abs/path/01-<problem-slug>.md" ...
+     "/abs/path/00-<company-slug>-company-brief.md" "/abs/path/01-<company-slug>-<problem-slug>.md" ...
    ```
 
 4. Check every file result. Exit code `6` is a partial import: resume with the returned
@@ -102,14 +119,50 @@ advertised, still deliver the files and tell the user to import them in
 Settings > Personalization > Reference Documents. Do not access ExtraBrain's database or files
 directly.
 
+## Set up ExtraBrain for the interview
+
+ExtraBrain's built-in System Design profile answers one interview phase at a time and searches
+imported documents for each answer, so the files above become live context. When the app
+advertises `profileApiVersion` `v1` and `profileSelection`, offer to pin that profile for the
+interview. It changes the app's profile selection, so ask before running:
+
+```sh
+extrabrain --json profiles pin system system_design
+extrabrain --json profiles selection
+```
+
+Confirm the selection reports the `system_design` system profile. Mention that
+`extrabrain --json profiles auto` restores automatic selection after the interview. If the
+capability is missing, tell the user to choose the System Design profile in the app.
+
+## Prepare the user
+
+Importing the files is not the end of the task: use the five cases to prepare the person.
+
+1. Give a short briefing: for each case, the one-sentence design summary, the core API calls,
+   the main tables and their keys, and the hardest deep dive to expect.
+2. If the user can reply, offer a mock interview on the most likely case. Act as the
+   interviewer and go one phase at a time in the order of the 45-minute walkthrough:
+   clarifying questions, estimation, API, data model, high-level architecture, then deep dives
+   chosen from sections 10–17. Ask, wait for the user's answer, then compare it with the file:
+   what was strong, what was missing (for example an idempotency key, a partition key, a
+   replicated storage number), and a better answer in two or three sentences. Push back the way
+   an interviewer would before moving on. End with the three most important gaps to practise.
+3. When the user is not available to reply (for example a non-interactive run), skip the mock
+   and include the briefing and the preparation plan in the response.
+
+After the user practises or interviews with ExtraBrain recording, the
+`extrabrain-review-interview` skill can review their answers if it is installed.
+
 ## Respond
 
 Reply in the user's language with:
 
 - A two- or three-sentence company summary.
 - The five problems in order, each with one line on why it fits the company.
-- The local file directory and the ExtraBrain group name and ID, or the import limitation.
-- A suggested practice plan: one problem per session, aloud, 45 minutes, against the
-  clarifying questions and deep dives in each file.
+- The briefing from "Prepare the user", step 1.
+- The validation result, the local file directory, and the ExtraBrain group name and ID, or the
+  import limitation.
+- The profile setup result and the preparation plan, then the mock interview offer.
 
-Keep the reply short; the detail belongs in the imported documents.
+Keep the reply focused; the full model answers belong in the imported documents.

@@ -1,55 +1,131 @@
 # System Design Problem Template
 
-Use these sections, in this order, for each problem file. Keep the whole file under about
-2,500 words so it reads well as an ExtraBrain reference document. Use concrete numbers, names,
-and examples from the company research instead of generic placeholders.
+Every problem file must contain every section below, in this order, with these exact `##`
+heading prefixes. `scripts/validate_prep.py` enforces them. If a section matters little for a
+problem, still write it: say briefly why it is minor and what you would do anyway. Never omit it.
 
-```markdown
+## Write for live retrieval
+
+During the interview, ExtraBrain's System Design copilot answers one phase at a time
+(requirements, high-level design, API, data model, storage, caching, consistency, sharding,
+queues, search, rate limiting, monitoring). It retrieves imported documents with keyword search,
+at most once per answer, receiving about five chunks of roughly 1,600 characters. So:
+
+- End each `##` heading with ` - <short problem name>`, for example
+  `## 6. API design - Streaks`, so every chunk names its problem.
+- Open each section with one plain sentence that names the company, the problem, and the phase.
+  Keep paragraphs and lists under about 1,200 characters, separated by blank lines.
+- Use concrete technology names, numbers, and field names. Generic advice is not useful in a
+  live interview.
+- Use the terms an interviewer would say: endpoint, schema, partition key, TTL, fan-out,
+  idempotency key, p99, QPS, replication factor.
+
+## Template
+
+````markdown
 # <Company>: <Problem title>
 
-**Likelihood:** <High | Medium | Lower> · **Focus:** <main skills tested>
+**Likelihood:** <High | Medium | Lower> · **Level:** <level> · **Focus:** <main skills tested>
 
-## Why this fits <Company>
+## 1. Why this fits <Company> - <short name>
 Two to four sentences tying the problem to a specific product or flow, citing [S#] sources.
 
-## Interview prompt
+## 2. Interview prompt - <short name>
 The prompt as an interviewer would say it, in one short paragraph.
 
-## Clarifying questions
-Five to eight questions to ask first, each with the assumption you would take if the
-interviewer leaves it open.
+## 3. Clarifying questions - <short name>
+**Ask first:** five to eight questions covering functional scope, core flows, scale,
+read/write ratio, growth horizon, existing stack, and the key non-functional constraint.
+**If unanswered, assume:** the bounded assumption for each, labelled as an assumption.
 
-## Requirements
-- Functional: the core user flows in scope, and what is explicitly out of scope.
-- Non-functional: latency, availability, consistency, durability, privacy, and compliance targets.
+## 4. Requirements - <short name>
+- Functional: numbered core user flows in scope; explicitly out of scope.
+- Non-functional: availability target, latency budget (p50/p99), consistency per flow,
+  durability, privacy, and compliance.
 
-## Scale estimates
-Users, requests per second (average and peak), storage and its growth, and bandwidth. Show the
-arithmetic. Label numbers that are assumptions rather than sourced.
+## 5. Scale estimation - <short name>
+Show each multiplication chain with units: users × actions/user/day = requests/day →
+average QPS → peak QPS (state the peak factor). Cover read QPS, write QPS, read:write ratio,
+storage per record × records = storage/day → per year, raw and replicated (for example
+"2 TB raw, 6 TB with 3× replication"), bandwidth, and cache size. Label sourced numbers [S#]
+and every other number as an assumption.
 
-## API and data model
-The main endpoints or events, the core entities with key fields, the storage choice for each,
-and partitioning keys.
+## 6. API design - <short name>
+A table with one row per endpoint: method, path, purpose, key request fields, response, status
+and error codes. Then one fenced example request and response for the most important call.
+State authentication, idempotency keys for writes, pagination (cursor), versioning, and rate
+limits. List asynchronous events or webhooks with their payload fields. Choose REST, gRPC,
+WebSocket, or SSE per interface and say why.
 
-## High-level design
-The components and the request path for the main flows, as a short list or a Mermaid diagram.
+## 7. Data model and schema - <short name>
+Each entity with fields and types, primary key, partition and sort keys, secondary indexes,
+and relationships. Give SQL DDL or a key-value/document key schema in a fenced block. Show the
+access pattern each index serves and data retention (TTL, archival).
 
-## Deep dives
-Two or three areas the interviewer is most likely to push on for this company, each with the
-options considered, the chosen approach, and why. Examples: preventing double booking,
-idempotent payments, fan-out, hot keys, search indexing, or regional failover.
+## 8. Storage choice - <short name>
+For each data set: the specific store (for example PostgreSQL, DynamoDB, Cassandra, Redis, S3,
+Elasticsearch, ClickHouse), why it fits the access pattern, and the alternative you rejected.
+Prefer the company's known stack when sources show it.
 
-## Trade-offs and failure modes
-What breaks first at 10x scale, how the design degrades, and what you would monitor.
+## 9. High-level architecture - <short name>
+The services with one-line responsibilities, synchronous vs asynchronous boundaries, and
+external dependencies. Include one fenced `d2` diagram (`direction: down`, 6–12 nodes, every
+edge labelled with its action, no D2 reserved words such as `index` as node IDs). Then walk the
+main write flow and the main read flow as numbered steps.
 
-## Company-specific twists
+## 10. Read/write path and consistency - <short name>
+Where strong consistency is required and where eventual consistency is acceptable, and how each
+is achieved: transactions, conditional writes, optimistic locking, idempotency, outbox, or
+sagas. Name the race conditions and how they are prevented.
+
+## 11. Caching - <short name>
+What is cached and where (client, CDN, Redis, in-process), key format, TTL, eviction policy,
+cache-aside or write-through, invalidation, expected hit rate, and hot-key mitigation. Note that
+deleting a cache key narrows, but does not eliminate, the stale-read window.
+
+## 12. Sharding, partitioning and replication - <short name>
+Partition key and why it spreads load, hot-partition handling, resharding, replication factor,
+leader/follower or multi-leader, multi-region strategy, failover, RPO/RTO, and backups.
+
+## 13. Async processing, queues and fan-out - <short name>
+Queues or streams (for example Kafka, SQS, Kinesis), topics and partitions, consumer groups,
+delivery semantics, retries with backoff, dead-letter queues, ordering, backpressure, and
+scheduled jobs.
+
+## 14. Search and indexing - <short name>
+Search or secondary lookups, the index technology, how the index is updated and how stale it
+may be. If the problem has no search component, say so and describe the lookups it does need.
+
+## 15. Security, auth, rate limiting and abuse - <short name>
+Authentication and authorization, PII and encryption, rate limits by user and IP, abuse or
+fraud vectors specific to this product, and compliance (for example GDPR deletion, PCI).
+
+## 16. Reliability, monitoring and SLOs - <short name>
+SLOs with targets, key metrics and alerts, dashboards, tracing, graceful degradation and
+fallbacks, load shedding, and rollout safety (canary, feature flags).
+
+## 17. Deep dives - <short name>
+Two or three areas the interviewer is most likely to push on for this company. For each: the
+problem, two options compared, the choice, and its cost.
+
+## 18. Bottlenecks, trade-offs and evolution - <short name>
+What breaks first at 10× scale and the metric that reveals it, key trade-offs made, and how
+the design evolves (MVP → current scale → 10×).
+
+## 19. Company-specific twists - <short name>
 Constraints particular to <Company>'s market, regulation, product, or known stack that set a
 strong answer apart from a generic one.
 
-## Follow-up questions
-Four to six likely follow-ups, each with a one- or two-sentence answer outline.
+## 20. Follow-up questions - <short name>
+Six to eight likely follow-ups, each with a two- or three-sentence answer.
 
-## Sources
+## 21. 45-minute walkthrough - <short name>
+A timed script of what to say: 0–5 min clarify (§3–4), 5–10 estimation (§5), 10–20 API, data
+model, and high-level design with a buy-in checkpoint (§6–9), 20–38 deep dives the interviewer
+picks (§10–17), 38–45 bottlenecks and wrap-up (§18). For each phase give the one-sentence
+recommendation and the one "watch out" to mention.
+
+## 22. Sources - <short name>
 Numbered URLs cited in this file as [S1], [S2], and so on. Repeat them in every file so each
-document stands alone in ExtraBrain search.
-```
+document stands alone. Mark search-snippet-only sources `(snippet only)`.
+````
