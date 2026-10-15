@@ -1,8 +1,45 @@
 # System Design Problem Template
 
 Every problem file must contain every section below, in this order, with these exact `##`
-heading prefixes. `scripts/validate_prep.py` enforces them. If a section matters little for a
-problem, still write it: say briefly why it is minor and what you would do anyway. Never omit it.
+heading prefixes. If a section matters little for a problem, still write it: say briefly why it
+is minor and what you would do anyway. Never omit it.
+
+## Completion checklist
+
+Every item is mandatory. `scripts/validate_prep.py` checks the same items automatically when
+Python 3 is available; otherwise check each one by hand for every file.
+
+Directory:
+
+- [ ] Exactly six files: `00-<company-slug>-company-brief.md` and five
+      `0N-<company-slug>-<problem-slug>.md` files numbered 01–05, each under 10 MiB.
+
+Company brief:
+
+- [ ] First line `# <Company>: ...`.
+- [ ] `##` sections in order: `What <Company> builds`, `Scale`, `Engineering signals`,
+      `Interview format`, `The five practice problems`, `Preparation plan`, `Sources`.
+- [ ] `The five practice problems` is a numbered list of exactly five.
+
+Each problem file:
+
+- [ ] First line `# <Company>: <Problem title>`, followed by a `**Likelihood:**` line.
+- [ ] All 22 `##` sections below, numbered `1.`–`22.` in order, each heading ending with
+      ` - <short problem name>`, and each except Sources with at least 200 characters of content.
+- [ ] Scale estimation: QPS math with numbers, and storage both raw and replicated.
+- [ ] API design: an endpoint table, HTTP methods (or named RPCs), a fenced example request and
+      response, and idempotency for writes.
+- [ ] Data model: a fenced DDL or key schema, primary or partition keys, and indexes.
+- [ ] High-level architecture: exactly one fenced `d2` diagram with `direction: down`, every
+      edge labelled (`a -> b: action`), no D2 reserved word (`index`, `shape`, `label`,
+      `style`, `class`, `source`, `target`, and so on) used as a node ID, and numbered flow steps.
+- [ ] Follow-up questions: at least six numbered items.
+- [ ] 45-minute walkthrough: at least four timed phases such as `0–5 min`.
+- [ ] No paragraph or list block over 1,500 characters outside fenced code.
+
+Brief and problem files:
+
+- [ ] Sources section with URLs, and every `[S#]` cited in the file listed there.
 
 ## Write for live retrieval
 

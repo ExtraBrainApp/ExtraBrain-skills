@@ -3,7 +3,8 @@
 
 Usage: python3 -I validate_prep.py <prep-directory>
 
-Checks the company brief and the five problem files against references/problem-template.md.
+Checks the company brief and the five problem files against the completion checklist in
+references/problem-template.md. Keep the two in sync.
 Prints every problem found and exits 1 if any required content is missing.
 """
 

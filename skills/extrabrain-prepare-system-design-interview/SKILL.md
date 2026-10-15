@@ -72,14 +72,27 @@ The directory must contain exactly these six files:
 - `01-<company-slug>-<problem-slug>.md` through `05-<company-slug>-<problem-slug>.md`, one per
   problem. ExtraBrain derives display names from file names, so keep the company slug in them.
 
-Then validate the directory and fix every reported problem before importing:
+Then validate the directory and fix every reported problem before importing. Use the bundled
+script only when a real Python 3 is available. On macOS, `/usr/bin/python3` is a stub that
+prompts to install the Command Line Tools until they are present, so check for them first:
 
 ```sh
-python3 -I <this-skill-directory>/scripts/validate_prep.py "<prep-directory>"
+if command -v python3 >/dev/null 2>&1 &&
+  { [ "$(uname)" != Darwin ] || [ "$(command -v python3)" != /usr/bin/python3 ] ||
+    xcode-select -p >/dev/null 2>&1; }; then
+  python3 -I "<this-skill-directory>/scripts/validate_prep.py" "<prep-directory>"
+else
+  echo "PYTHON_UNAVAILABLE"
+fi
 ```
 
-Repeat until it prints `OK`. The script checks structure; also reread each API, data model, and
-architecture section yourself to confirm it is specific to this company's product.
+- If the script runs, repeat it until it prints `OK`.
+- If it prints `PYTHON_UNAVAILABLE`, do not install Python. Instead, go through the completion
+  checklist in [references/problem-template.md](references/problem-template.md) item by item
+  for every file, fix each gap, and report that validation was done manually.
+
+Either way, reread each API, data model, and architecture section yourself to confirm it is
+specific to this company's product.
 
 ## Import into ExtraBrain
 
@@ -161,7 +174,7 @@ Reply in the user's language with:
 - A two- or three-sentence company summary.
 - The five problems in order, each with one line on why it fits the company.
 - The briefing from "Prepare the user", step 1.
-- The validation result, the local file directory, and the ExtraBrain group name and ID, or the
+- The validation result (script or manual), the local file directory, and the ExtraBrain group name and ID, or the
   import limitation.
 - The profile setup result and the preparation plan, then the mock interview offer.
 

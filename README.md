@@ -30,6 +30,6 @@ Install the CLI using its repository's installation instructions. Document opera
 
 The five session skills generate insights in the agent and do not save them to ExtraBrain. They require a compatible running app that advertises `sessionApiVersion: "v1"` and the required session capabilities. The CLI source contract inspected is `88ef1fa2e64ec6433ded9ebc929f4e55ca3bdae9`; its README describes session reads as future-app compatibility, so an installed released CLI or document-only app may not expose them yet.
 
-`extrabrain-prepare-system-design-interview` needs the agent's own web research tools, Python 3 for its validator, and the document capabilities `documentImport`, `documentGroups`, and `documentMetadata`. With `profileSelection` it can also pin the System Design profile after asking. Without the document capabilities it still writes the case files for native import.
+`extrabrain-prepare-system-design-interview` needs the agent's own web research tools and the document capabilities `documentImport`, `documentGroups`, and `documentMetadata`. With `profileSelection` it can also pin the System Design profile after asking. Its validator uses Python 3 when available; without it, the agent checks the same completion checklist by hand. Without the document capabilities it still writes the case files for native import.
 
 The `use-extrabrain` skill was extracted from [ExtraBrain PR #985](https://github.com/ExtraBrainApp/ExtraBrain/pull/985).
