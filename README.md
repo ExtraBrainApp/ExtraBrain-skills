@@ -62,10 +62,11 @@ These four skills read a session you recorded in ExtraBrain and write a short re
 | --- | --- |
 | `extrabrain-review-interview` | Reviews your answers in a recorded interview. It shows your strongest moments, the most important improvements, and stronger versions of your answers. |
 
-### Prepare for a system design interview
+### Prepare for an upcoming interview
 
 | Skill | What it does for you |
 | --- | --- |
+| `extrabrain-prepare-interview` | Describe any interview in your own words: behavioral, coding, technical, a case study, a recruiter screen, or a non-technical role. It works out what you are likely to be asked, researches the company and role, writes study files with complete model answers, adds them all to ExtraBrain as one document group for that interview, and then coaches you through them. |
 | `extrabrain-prepare-system-design-interview` | Give it a company name. It researches the company on the web, writes five likely system design questions with complete model answers, adds them to ExtraBrain as a document group, and then coaches you through them. |
 
 ### Manage your reference documents

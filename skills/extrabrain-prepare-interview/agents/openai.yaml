@@ -1,0 +1,7 @@
+interface:
+  display_name: "ExtraBrain Prepare Interview"
+  short_description: "Prepare any described interview and load it into ExtraBrain"
+  default_prompt: "Use $extrabrain-prepare-interview to prepare me for a 45-minute behavioral and Python coding interview for a senior backend role at Preply next Friday."
+
+policy:
+  allow_implicit_invocation: true
