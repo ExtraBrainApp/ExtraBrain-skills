@@ -7,8 +7,9 @@ and what to know anyway. Never omit it.
 
 ## Completion checklist
 
-Every item is mandatory. `scripts/validate_prep.py` checks the same items automatically when
-Python 3 is available; otherwise check each one by hand for every file.
+Every item is mandatory. `scripts/validate_prep.py` checks the structural items automatically
+when Python 3 is available; otherwise check each one by hand for every file. No script checks the
+accuracy and consistency items: review them yourself for every file.
 
 Directory:
 
@@ -37,6 +38,25 @@ Brief and topic files:
 
 - [ ] A Sources section with URLs, or the line `User-provided material` when the file relies
       only on what the user supplied, and every `[S#]` cited in the file listed there.
+
+Accuracy and consistency, for each topic file:
+
+- [ ] Every factual claim is correct for the field and current: definitions, APIs and their
+      complexity, formulas, regulations, protocols, and company facts. Claims you could not
+      verify are marked as such or removed.
+- [ ] Every code sample, calculation, and worked example is recomputed or traced by hand and
+      gives the stated result. Each number has one value across sections and files.
+- [ ] Model answers, follow-ups, and walkthroughs agree with each other and with the concepts,
+      cases, and cheat sheets they rely on; no file contradicts another.
+- [ ] Stories use only details the user supplied; every gap is marked `[confirm: ...]`, and
+      each story's `Use for` matches the questions that point to it.
+- [ ] A `case` with a technical design is internally consistent: every table, field, and status
+      the API or flows use is defined in its data model, idempotency keys match the stored
+      unique keys, and every uniqueness guarantee is enforceable in the chosen store.
+
+Brief:
+
+- [ ] Its file list, assessed areas, and points to memorise match the final topic files exactly.
 
 ## Write for live retrieval
 

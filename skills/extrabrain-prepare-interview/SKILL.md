@@ -84,9 +84,18 @@ interview title names this interview, for example `Preply Senior Backend Enginee
 Every file must follow [references/file-formats.md](references/file-formats.md) completely,
 with concrete content specific to this interview. Write complete model answers, not outlines.
 
-Then validate the directory and fix every reported problem before importing. Use the bundled
-script only when a real Python 3 is available. On macOS, `/usr/bin/python3` is a stub that
-prompts to install the Command Line Tools until they are present, so check for them first:
+Then review accuracy and consistency. This is mandatory, because most errors in model answers
+are wrong facts or contradictions between sections and files, not missing sections. For every
+file, go through the "Accuracy and consistency" items of the completion checklist in
+[references/file-formats.md](references/file-formats.md) one by one, fix every error in the
+files, and reread the answers to confirm they are specific to this interview rather than
+generic. Then check the brief against the final topic files.
+
+Then validate the structure and fix every reported problem before importing. Run this exact
+snippet as a single shell command. Do not run `python3`, `which python3`, or the script any
+other way, and do not use Python for anything else in this skill; edit files with your file
+tools. On macOS, `/usr/bin/python3` is a stub that opens an install prompt until the Command
+Line Tools are present, and this snippet is what avoids it:
 
 ```sh
 if command -v python3 >/dev/null 2>&1 &&
@@ -98,13 +107,11 @@ else
 fi
 ```
 
-- If the script runs, repeat it until it prints `OK`.
-- If it prints `PYTHON_UNAVAILABLE`, do not install Python. Go through the completion checklist
-  in [references/file-formats.md](references/file-formats.md) item by item for every file, fix
-  each gap, and report that validation was done manually.
-
-Either way, reread the files yourself to confirm the answers are correct and specific to this
-interview rather than generic.
+- If it prints validator output, fix the reported problems and rerun the same snippet until it
+  prints `OK`.
+- If it prints `PYTHON_UNAVAILABLE`, do not install Python. Instead, go through the structural
+  items of the completion checklist item by item for every file, fix each gap, and report that
+  validation was done manually.
 
 ## Import into ExtraBrain
 
@@ -191,8 +198,9 @@ Reply in the user's language with:
 - One or two sentences on the interview as you understood it, plus any assumptions made.
 - The topic files in order, each with its kind and one line on why it matters.
 - The briefing from "Prepare the user", step 1.
-- The validation result (script or manual), the local file directory, and the ExtraBrain group
-  name and ID, or the import limitation.
+- The consistency review result (how many errors were fixed), the validation result (script or
+  manual), the local file directory, and the ExtraBrain group name and ID, or the import
+  limitation.
 - The profile setup result and the preparation plan, then the mock interview offer.
 
 Keep the reply focused; the full answers belong in the imported documents.
