@@ -1,30 +1,19 @@
 # Reference Documents Through the CLI
 
-## Capabilities and pairing
+## Capabilities
 
-Read `extrabrain --json capabilities` before document work. Use these fields from
-`data.capabilities` and request only the scopes needed for the task:
+Read `extrabrain --json capabilities` before document work and confirm the capability each
+command needs in `data.capabilities`. The CLI needs no pairing, token, or approval; it works
+whenever ExtraBrain is running with MCP enabled in Settings.
 
-| Commands | Required capability | Pairing scope |
-| --- | --- | --- |
-| `documents import`, `resume`, `status` | `documentImport` | `documents.import` |
-| `documents list` | `documentMetadata` | `documents.metadata.read` |
-| `documents search` | `indexedSearch` | `documents.text.read` |
-| `documents text` | `extractedText` | `documents.text.read` |
-| `documents export` | `originalExport` | `documents.original.export` |
-| `documents delete` | `revisionSafeDelete` | `documents.delete` |
-
-`extrabrain pair` requests metadata-read and import scopes by default. It opens an approval
-prompt in ExtraBrain. Search, text reads, original export, and deletion need additional scopes.
-For example, to list documents and read their text:
-
-```sh
-extrabrain pair --scope documents.metadata.read --scope documents.text.read
-```
-
-A new pairing replaces the CLI's stored credential. Request all scopes needed by the current
-workflow together, including import if it is still needed. Keep credentials in the CLI's
-protected storage.
+| Commands | Required capability |
+| --- | --- |
+| `documents import`, `resume`, `status` | `documentImport` |
+| `documents list` | `documentMetadata` |
+| `documents search` | `indexedSearch` |
+| `documents text` | `extractedText` |
+| `documents export` | `originalExport` |
+| `documents delete` | `revisionSafeDelete` |
 
 ## Import and verify
 
@@ -67,7 +56,7 @@ documents. Extracted text supports search and analysis; use export for original 
 
 ## Export an original
 
-Pair with `documents.metadata.read` and `documents.original.export` when needed, then:
+To write the exact original bytes to a new file:
 
 ```sh
 extrabrain --json documents export --output "/absolute/path/to/new-copy.pdf" <document-id>
@@ -79,8 +68,8 @@ extracted text.
 
 ## Delete one document
 
-Pair with `documents.metadata.read` and `documents.delete` when the user explicitly requests
-deletion. List documents to identify the target and read its current `revision`, then:
+Delete only when the user explicitly requests it. List documents to identify the target and
+read its current `revision`, then:
 
 ```sh
 extrabrain --json documents delete --revision <revision> <document-id>
@@ -97,14 +86,13 @@ Do not retry automatically with a newer revision.
 | `0` | Successful command; inspect its data and verify mutations. |
 | `1` | Read the failure message and resolve its cause before retrying. |
 | `2` | Check `extrabrain --help` and correct the arguments. |
-| `3` | ExtraBrain is not reachable. Have the user start it and enable local document automation. |
-| `4` | Pair with the required scopes and obtain approval in the app. |
+| `3` | ExtraBrain is not reachable. Have the user start it and enable MCP in Settings. |
+| `4` | The app or CLI predates URL-only access. Have the user update both. |
 | `5` | Refresh metadata/status and resolve the reported conflict before retrying. |
 | `6` | Inspect every file result; resume only the same import intent. |
-| `7` | Restore access to macOS Keychain; there is no plaintext credential fallback. |
+| `7` | The CLI could not use protected storage. Have the user restore access to macOS Keychain. |
 | `8` | The API, capability, document, text, or original may be unavailable. Follow the specific error. |
 
 The CLI connects to `127.0.0.1:37373` by default. Set `EXTRABRAIN_PORT` only when the app is
-configured to use another local port. The CLI does not start the app. A build without the local
-automation listener cannot serve CLI document commands; use the app's native import UI when
-appropriate.
+configured to use another local port. The CLI does not start the app. While MCP is off, the app
+cannot serve CLI document commands; use the app's native import UI when appropriate.

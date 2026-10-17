@@ -1,11 +1,11 @@
 ---
 name: use-extrabrain
-description: "Manage ExtraBrain reference documents through the standalone extrabrain CLI. Use for importing local files, checking import progress, listing or searching documents, reading extracted text, exporting originals, deleting a document, pairing the CLI, or updating the CLI itself."
+description: "Manage ExtraBrain reference documents through the standalone extrabrain CLI. Use for importing local files, checking import progress, listing or searching documents, reading extracted text, exporting originals, deleting a document, or updating the CLI itself."
 ---
 
 # Use ExtraBrain
 
-Use the first-party `extrabrain` CLI for reference documents, pairing, capability discovery, and updates. Session preparation, recording controls, profiles, history, settings, and desktop app updates require the ExtraBrain app UI.
+Use the first-party `extrabrain` CLI for reference documents, capability discovery, and updates. Session preparation, recording controls, profiles, history, settings, and desktop app updates require the ExtraBrain app UI.
 
 ## Establish the CLI contract
 
@@ -16,11 +16,9 @@ Use the first-party `extrabrain` CLI for reference documents, pairing, capabilit
    `{ "code": number, "data": object | null, "message": string }`. On success, confirm
    `data.apiVersion` is `v1`, `data.available` is true, and `data.capabilities` advertises the
    required operation. Read [references/documents.md](references/documents.md) for the mapping,
-   commands, pairing scopes, and recovery steps.
-3. ExtraBrain must already be running with local document automation enabled. Discovery is
-   public and does not prove the CLI is paired. If a document command reports an authentication
-   or scope error, pair with the scopes needed for the user's task and have the user approve
-   the connection in the app. Credentials are stored by the CLI in macOS Keychain.
+   commands, and recovery steps.
+3. ExtraBrain must already be running with MCP enabled in Settings; that switch starts the
+   local listener the CLI uses. The CLI needs no pairing, token, or approval.
 
 Use `--json` for command results. The exit code and per-file statuses determine success;
 a partial import is not a completed import.
