@@ -201,6 +201,8 @@ def check_brief(path, company, errors):
 
 
 def main():
+    # A Windows console or pipe may not use UTF-8; never crash on non-ASCII headings.
+    sys.stdout.reconfigure(errors="backslashreplace")
     if len(sys.argv) != 2:
         print(__doc__.strip())
         return 2

@@ -52,14 +52,31 @@ Never shorten a case by dropping a section; write all five at the same depth. Ea
 must state why it fits this company and cite its sources. Present problems as likely practice
 topics, never as confirmed interview questions, unless a cited report shows the company asked it.
 
-Write the files to a new private directory outside the repository, using UTF-8 Markdown:
+Write the files to a new private directory outside the repository, using UTF-8 Markdown.
+Create it with the snippet for your shell, run as a single command:
+
+POSIX shell (macOS, Linux, or Git Bash on Windows):
 
 ```sh
-mkdir -p -m 700 "${TMPDIR:-/tmp}/extrabrain-sd-prep"
-mkdir -m 700 "${TMPDIR:-/tmp}/extrabrain-sd-prep/<company-slug>-<YYYYMMDD>"
+dir="${TMPDIR:-/tmp}/extrabrain-sd-prep/<company-slug>-<YYYYMMDD>"
+mkdir -p -m 700 "${dir%/*}" && mkdir -m 700 "$dir" &&
+  if command -v cygpath >/dev/null 2>&1; then cygpath -m "$dir"; else echo "$dir"; fi
 ```
 
-If that directory already exists, add a suffix such as `-2` instead of reusing it.
+PowerShell (Windows), where `%TEMP%` is already private to the user:
+
+```powershell
+$dir = Join-Path $env:TEMP 'extrabrain-sd-prep\<company-slug>-<YYYYMMDD>'
+New-Item -ItemType Directory -Force -Path (Split-Path $dir) | Out-Null
+(New-Item -ItemType Directory -Path $dir -ErrorAction Stop).FullName
+```
+
+The printed path is `<prep-directory>`. Use it exactly as printed for your file tools, the
+validator, and the import. On Windows it is a native path such as
+`C:/Users/<name>/AppData/Local/Temp/extrabrain-sd-prep/...`, which `extrabrain.exe` can read;
+never pass it a Git Bash path such as `/tmp/...` or `/c/...`. If the directory already exists,
+the command fails: add a suffix such as `-2` to the directory name instead of reusing it.
+
 The directory must contain exactly these six files:
 
 - `00-<company-slug>-company-brief.md`, starting with `# <Company>: ...`, with these `##`
@@ -80,21 +97,58 @@ contradiction in the files, and reread each API, data model, and architecture se
 confirm it is specific to this company's product. Then check the brief against the final case
 files.
 
-Then validate the structure and fix every reported problem before importing. Run this exact
-snippet as a single shell command. Do not run `python3`, `which python3`, or the script any
-other way, and do not use Python for anything else in this skill; edit files with your file
-tools. On macOS, `/usr/bin/python3` is a stub that opens an install prompt until the Command
-Line Tools are present, and this snippet is what avoids it:
+Then validate the structure and fix every reported problem before importing. Run the exact
+snippet for your shell as a single command. Do not run `python3`, `python`, `py`,
+`which python3`, or the script any other way, and do not use Python for anything else in this
+skill; edit files with your file tools. Some Python commands are stubs that open an
+installer instead of running: `/usr/bin/python3` on macOS until the Command Line Tools are
+present, and the `python3` and `python` aliases in `WindowsApps` on Windows, which open the
+Microsoft Store. These snippets are what avoid them.
+
+POSIX shell (macOS, Linux, or Git Bash on Windows):
 
 ```sh
-if command -v python3 >/dev/null 2>&1 &&
-  { [ "$(uname)" != Darwin ] || [ "$(command -v python3)" != /usr/bin/python3 ] ||
-    xcode-select -p >/dev/null 2>&1; }; then
-  python3 -I "<this-skill-directory>/scripts/validate_prep.py" "<prep-directory>"
+py=
+case "$(uname)" in
+  MINGW* | MSYS* | CYGWIN*)
+    for c in py python3 python; do
+      case "$c:$(command -v "$c")" in
+        *:) ;;
+        py:*) py=py; break ;;
+        *[Ww]indows[Aa]pps*) ;;
+        *) py=$c; break ;;
+      esac
+    done ;;
+  *)
+    if command -v python3 >/dev/null 2>&1 &&
+      { [ "$(uname)" != Darwin ] || [ "$(command -v python3)" != /usr/bin/python3 ] ||
+        xcode-select -p >/dev/null 2>&1; }; then
+      py=python3
+    fi ;;
+esac
+if [ -n "$py" ]; then
+  "$py" -I "<this-skill-directory>/scripts/validate_prep.py" "<prep-directory>"
 else
   echo "PYTHON_UNAVAILABLE"
 fi
 ```
+
+PowerShell (Windows):
+
+```powershell
+$py = 'py', 'python3', 'python' | ForEach-Object {
+  $name = $_
+  Get-Command $name -CommandType Application -ErrorAction SilentlyContinue |
+    Where-Object { $name -eq 'py' -or $_.Source -notlike '*\WindowsApps\*' }
+} | Select-Object -First 1
+if ($py) {
+  & $py.Source -I "<this-skill-directory>\scripts\validate_prep.py" "<prep-directory>"
+} else {
+  'PYTHON_UNAVAILABLE'
+}
+```
+
+On Windows, write `<this-skill-directory>` as a native path such as `C:/Users/...`.
 
 - If it prints validator output, fix the reported problems and rerun the same snippet until it
   prints `OK`.
@@ -119,8 +173,11 @@ Use `--json` for every CLI command except `--version`; results use the envelope
 
    ```sh
    extrabrain --json documents import --group "<Company> system design interview" -- \
-     "/abs/path/00-<company-slug>-company-brief.md" "/abs/path/01-<company-slug>-<problem-slug>.md" ...
+     "<prep-directory>/00-<company-slug>-company-brief.md" "<prep-directory>/01-<company-slug>-<problem-slug>.md" ...
    ```
+
+   In PowerShell, write the command on one line and quote the separator as `'--'` so
+   PowerShell passes it through.
 
 4. Check every file result. Exit code `6` is a partial import: resume with the returned
    resume ID rather than starting a new import; ignore the resume ID when every file succeeded.
