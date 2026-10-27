@@ -73,11 +73,13 @@ POSIX shell (macOS, Linux, or Git Bash on Windows):
 
 ```sh
 dir="${TMPDIR:-/tmp}/extrabrain-interview-prep/<interview-slug>-<YYYYMMDD>"
-mkdir -p -m 700 "${dir%/*}" && mkdir -m 700 "$dir" &&
-  if command -v cygpath >/dev/null 2>&1; then cygpath -m "$dir"; else echo "$dir"; fi
+case "$(uname)" in
+  MINGW* | MSYS* | CYGWIN*) mkdir -p "${dir%/*}" && mkdir "$dir" && cygpath -m "$dir" ;;
+  *) mkdir -p -m 700 "${dir%/*}" && mkdir -m 700 "$dir" && echo "$dir" ;;
+esac
 ```
 
-PowerShell (Windows), where `%TEMP%` is already private to the user:
+PowerShell (Windows):
 
 ```powershell
 $dir = Join-Path $env:TEMP 'extrabrain-interview-prep\<interview-slug>-<YYYYMMDD>'
@@ -85,11 +87,12 @@ New-Item -ItemType Directory -Force -Path (Split-Path $dir) | Out-Null
 (New-Item -ItemType Directory -Path $dir -ErrorAction Stop).FullName
 ```
 
+On Windows the user's temp folder is already private, so no permission change is needed.
 The printed path is `<prep-directory>`. Use it exactly as printed for your file tools, the
-validator, and the import. On Windows it is a native path such as
-`C:/Users/<name>/AppData/Local/Temp/extrabrain-interview-prep/...`, which `extrabrain.exe` can
-read; never pass it a Git Bash path such as `/tmp/...` or `/c/...`. If the directory already
-exists, the command fails: add a suffix such as `-2` to the directory name instead of reusing it.
+validator, and the import. On Windows it is a native path that `extrabrain.exe` can read
+(`C:\Users\...` from PowerShell, `C:/Users/...` from Git Bash); never pass it a Git Bash path
+such as `/tmp/...` or `/c/...`. If the directory already exists, the command fails: add a
+suffix such as `-2` to the directory name instead of reusing it.
 
 The interview title names this interview, for example `Preply Senior Backend Engineer` or
 `City Hospital ICU Nurse`; the slug is its lowercase hyphenated form. The directory contains:
@@ -161,11 +164,11 @@ if ($py) {
 
 On Windows, write `<this-skill-directory>` as a native path such as `C:/Users/...`.
 
-- If it prints validator output, fix the reported problems and rerun the same snippet until it
-  prints `OK`.
-- If it prints `PYTHON_UNAVAILABLE`, do not install Python. Instead, go through the structural
-  items of the completion checklist item by item for every file, fix each gap, and report that
-  validation was done manually.
+- If it prints validator output (starting with `OK` or `FAIL`), fix the reported problems and
+  rerun the same snippet until it prints `OK`.
+- If it prints `PYTHON_UNAVAILABLE` or anything else, such as `No installed Python found!`, do
+  not install Python. Instead, go through the structural items of the completion checklist
+  item by item for every file, fix each gap, and report that validation was done manually.
 
 ## Import into ExtraBrain
 
@@ -189,8 +192,7 @@ except `--version`; results use the envelope
      "<prep-directory>/00-<interview-slug>-brief.md" "<prep-directory>/01-<interview-slug>-<topic-slug>.md" ...
    ```
 
-   In PowerShell, write the command on one line and quote the separator as `'--'` so
-   PowerShell passes it through.
+   In PowerShell, write the command on one line.
 
 4. Check every file result. Exit code `6` is a partial import: resume with the returned resume
    ID rather than starting a new import; ignore the resume ID when every file succeeded. The

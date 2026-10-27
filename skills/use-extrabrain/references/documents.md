@@ -30,10 +30,9 @@ an accepted transfer alone does not establish that a document is ready for searc
 
 The current CLI accepts UTF-8 `.txt`, `.md`, and `.pdf` files, up to 10 MiB per file and
 20 files per batch. It rejects symlinks and non-regular files. Quote paths and use `--` to
-separate them from options; in PowerShell, quote the separator as `'--'`. On Windows, pass
-native paths such as `C:\Users\me\notes.md` or `C:/Users/me/notes.md`; in Git Bash, convert a
-POSIX path such as `/tmp/...` or `/c/...` with `cygpath -m` first. Use `--recursive` only when
-the user intends to include nested directories. Directory import is additive: missing files
+separate them from options. On Windows, pass native paths such as `C:\Users\me\notes.md` or
+`C:/Users/me/notes.md`; in Git Bash, convert a POSIX path such as `/tmp/...` or `/c/...` with
+`cygpath -m` first. Use `--recursive` only when the user intends to include nested directories. Directory import is additive: missing files
 never delete existing documents.
 
 For an interrupted or partial import, inspect the reported results and use its returned
