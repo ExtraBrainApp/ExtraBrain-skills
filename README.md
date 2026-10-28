@@ -10,32 +10,44 @@ A skill is a small set of instructions that teaches your AI assistant how to do 
 
 1. **The ExtraBrain app**, installed and running on your computer. Get it at [extrabrain.app](https://extrabrain.app).
 2. **An AI assistant that supports skills**, such as Claude Code or Codex.
-3. **The ExtraBrain command-line tool.** Your assistant uses it to talk to the app. It is installed with one command in "How to install" below. It works on Mac only (Apple Silicon and Intel).
+3. **The ExtraBrain command-line tool.** Your assistant uses it to talk to the app. It is installed with one command in "How to install" below. It works on Mac (Apple Silicon and Intel) and on Windows 10 and 11 (Intel/AMD and ARM).
 4. **Node.js**, which provides the `npx` command used in the install step below. Get it from [nodejs.org](https://nodejs.org).
 
 ## How to install
 
-Open the Terminal app on your Mac and follow these two steps.
-
 ### Step 1: Install the ExtraBrain command-line tool
+
+**On a Mac**, open the Terminal app (press `⌘ Space`, type "Terminal", and press Return), then copy this line into it and press Return:
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/ExtraBrainApp/ExtraBrain-cli/master/install.sh | bash
 ```
 
-This needs no administrator password. When it finishes, open a new Terminal window and check that it worked:
+**On Windows**, open PowerShell (press the Windows key, type "PowerShell", and press Enter), then copy this line into it and press Enter:
+
+```powershell
+irm https://raw.githubusercontent.com/ExtraBrainApp/ExtraBrain-cli/master/install.ps1 | iex
+```
+
+This needs no administrator password. When it finishes, close the window and open a new Terminal window (Mac) or PowerShell window (Windows). The command only works in new windows. Check that it worked:
 
 ```sh
 extrabrain --version
 ```
 
-If it prints a version number, you are set. To update the tool later, run `extrabrain update`.
+If it prints a version number, you are set. If Windows shows "Windows protected your PC", choose **More info**, then **Run anyway**. The tool is not yet signed by Microsoft.
+
+To update the tool later, run `extrabrain update`. On Windows the update finishes just after the command exits, so check the new version by running `extrabrain --version` again.
 
 ### Step 2: Install the skills
+
+In the new Terminal or PowerShell window, run:
 
 ```sh
 npx skills add ExtraBrainApp/ExtraBrain-skills
 ```
+
+If PowerShell says that running scripts is disabled on this system, type `npx.cmd` instead of `npx`.
 
 The installer lists the skills and lets you choose which ones to add. To see the list without installing anything, run:
 

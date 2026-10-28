@@ -30,8 +30,10 @@ an accepted transfer alone does not establish that a document is ready for searc
 
 The current CLI accepts UTF-8 `.txt`, `.md`, and `.pdf` files, up to 10 MiB per file and
 20 files per batch. It rejects symlinks and non-regular files. Quote paths and use `--` to
-separate them from options. Use `--recursive` only when the user intends to include nested
-directories. Directory import is additive: missing files never delete existing documents.
+separate them from options. On Windows, pass native paths such as `C:\Users\me\notes.md` or
+`C:/Users/me/notes.md`; in Git Bash, convert a POSIX path such as `/tmp/...` or `/c/...` with
+`cygpath -m` first. Use `--recursive` only when the user intends to include nested directories. Directory import is additive: missing files
+never delete existing documents.
 
 For an interrupted or partial import, inspect the reported results and use its returned
 resume ID to retry the same unchanged files:
@@ -90,7 +92,7 @@ Do not retry automatically with a newer revision.
 | `4` | The app or CLI predates URL-only access. Have the user update both. |
 | `5` | Refresh metadata/status and resolve the reported conflict before retrying. |
 | `6` | Inspect every file result; resume only the same import intent. |
-| `7` | The CLI could not use protected storage. Have the user restore access to macOS Keychain. |
+| `7` | The CLI could not use protected storage: the macOS Keychain, or on Windows the DPAPI-protected credential file under `%LOCALAPPDATA%\ExtraBrain`. Have the user restore access to it. |
 | `8` | The API, capability, document, text, or original may be unavailable. Follow the specific error. |
 
 The CLI connects to `127.0.0.1:37373` by default. Set `EXTRABRAIN_PORT` only when the app is

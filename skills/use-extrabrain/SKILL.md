@@ -11,7 +11,9 @@ Use the first-party `extrabrain` CLI for reference documents, capability discove
 
 1. Check `extrabrain --version` and `extrabrain --help` for the installed command surface.
    If the command is missing, use the installation instructions in the
-   [ExtraBrain CLI repository](https://github.com/ExtraBrainApp/ExtraBrain-cli).
+   [ExtraBrain CLI repository](https://github.com/ExtraBrainApp/ExtraBrain-cli). The CLI runs
+   on macOS and Windows with the same commands, flags, and `--json` output; on Windows it is
+   `extrabrain.exe`, and a newly installed CLI is found only in a new terminal window.
 2. Before document operations, run `extrabrain --json capabilities`. The JSON envelope is
    `{ "code": number, "data": object | null, "message": string }`. On success, confirm
    `data.apiVersion` is `v1`, `data.available` is true, and `data.capabilities` advertises the
@@ -48,5 +50,6 @@ the user can use Settings > Personalization > Reference Documents and the native
 ## Update the CLI
 
 When the user asks to update the CLI, run `extrabrain update`, then check
-`extrabrain --version`. This updates the standalone command. Use the app UI for desktop
-application updates.
+`extrabrain --version` as a separate command. On Windows the update finishes just after
+`extrabrain update` exits, so never chain the two in one command. This updates the standalone
+command. Use the app UI for desktop application updates.

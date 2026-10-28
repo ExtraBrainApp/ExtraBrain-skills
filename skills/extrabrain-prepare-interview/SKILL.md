@@ -66,15 +66,35 @@ were asked. If research yields little, say so and base the files on the role and
 
 ## Write the files
 
-Write UTF-8 Markdown files to a new private directory outside the repository:
+Write UTF-8 Markdown files to a new private directory outside the repository. Create it
+with the snippet for your shell, run as a single command:
+
+POSIX shell (macOS, Linux, or Git Bash on Windows):
 
 ```sh
-mkdir -p -m 700 "${TMPDIR:-/tmp}/extrabrain-interview-prep"
-mkdir -m 700 "${TMPDIR:-/tmp}/extrabrain-interview-prep/<interview-slug>-<YYYYMMDD>"
+dir="${TMPDIR:-/tmp}/extrabrain-interview-prep/<interview-slug>-<YYYYMMDD>"
+case "$(uname)" in
+  MINGW* | MSYS* | CYGWIN*) mkdir -p "${dir%/*}" && mkdir "$dir" && cygpath -m "$dir" ;;
+  *) mkdir -p -m 700 "${dir%/*}" && mkdir -m 700 "$dir" && echo "$dir" ;;
+esac
 ```
 
-If that directory already exists, add a suffix such as `-2` instead of reusing it. The
-interview title names this interview, for example `Preply Senior Backend Engineer` or
+PowerShell (Windows):
+
+```powershell
+$dir = Join-Path $env:TEMP 'extrabrain-interview-prep\<interview-slug>-<YYYYMMDD>'
+New-Item -ItemType Directory -Force -Path (Split-Path $dir) | Out-Null
+(New-Item -ItemType Directory -Path $dir -ErrorAction Stop).FullName
+```
+
+On Windows the user's temp folder is already private, so no permission change is needed.
+The printed path is `<prep-directory>`. Use it exactly as printed for your file tools, the
+validator, and the import. On Windows it is a native path that `extrabrain.exe` can read
+(`C:\Users\...` from PowerShell, `C:/Users/...` from Git Bash); never pass it a Git Bash path
+such as `/tmp/...` or `/c/...`. If the directory already exists, the command fails: add a
+suffix such as `-2` to the directory name instead of reusing it.
+
+The interview title names this interview, for example `Preply Senior Backend Engineer` or
 `City Hospital ICU Nurse`; the slug is its lowercase hyphenated form. The directory contains:
 
 - `00-<interview-slug>-brief.md`: the interview brief, following the brief template.
@@ -91,27 +111,64 @@ file, go through the "Accuracy and consistency" items of the completion checklis
 files, and reread the answers to confirm they are specific to this interview rather than
 generic. Then check the brief against the final topic files.
 
-Then validate the structure and fix every reported problem before importing. Run this exact
-snippet as a single shell command. Do not run `python3`, `which python3`, or the script any
-other way, and do not use Python for anything else in this skill; edit files with your file
-tools. On macOS, `/usr/bin/python3` is a stub that opens an install prompt until the Command
-Line Tools are present, and this snippet is what avoids it:
+Then validate the structure and fix every reported problem before importing. Run the exact
+snippet for your shell as a single command. Do not run `python3`, `python`, `py`,
+`which python3`, or the script any other way, and do not use Python for anything else in this
+skill; edit files with your file tools. Some Python commands are stubs that open an
+installer instead of running: `/usr/bin/python3` on macOS until the Command Line Tools are
+present, and the `python3` and `python` aliases in `WindowsApps` on Windows, which open the
+Microsoft Store. These snippets are what avoid them.
+
+POSIX shell (macOS, Linux, or Git Bash on Windows):
 
 ```sh
-if command -v python3 >/dev/null 2>&1 &&
-  { [ "$(uname)" != Darwin ] || [ "$(command -v python3)" != /usr/bin/python3 ] ||
-    xcode-select -p >/dev/null 2>&1; }; then
-  python3 -I "<this-skill-directory>/scripts/validate_prep.py" "<prep-directory>"
+py=
+case "$(uname)" in
+  MINGW* | MSYS* | CYGWIN*)
+    for c in py python3 python; do
+      case "$c:$(command -v "$c")" in
+        *:) ;;
+        py:*) py=py; break ;;
+        *[Ww]indows[Aa]pps*) ;;
+        *) py=$c; break ;;
+      esac
+    done ;;
+  *)
+    if command -v python3 >/dev/null 2>&1 &&
+      { [ "$(uname)" != Darwin ] || [ "$(command -v python3)" != /usr/bin/python3 ] ||
+        xcode-select -p >/dev/null 2>&1; }; then
+      py=python3
+    fi ;;
+esac
+if [ -n "$py" ]; then
+  "$py" -I "<this-skill-directory>/scripts/validate_prep.py" "<prep-directory>"
 else
   echo "PYTHON_UNAVAILABLE"
 fi
 ```
 
-- If it prints validator output, fix the reported problems and rerun the same snippet until it
-  prints `OK`.
-- If it prints `PYTHON_UNAVAILABLE`, do not install Python. Instead, go through the structural
-  items of the completion checklist item by item for every file, fix each gap, and report that
-  validation was done manually.
+PowerShell (Windows):
+
+```powershell
+$py = 'py', 'python3', 'python' | ForEach-Object {
+  $name = $_
+  Get-Command $name -CommandType Application -ErrorAction SilentlyContinue |
+    Where-Object { $name -eq 'py' -or $_.Source -notlike '*\WindowsApps\*' }
+} | Select-Object -First 1
+if ($py) {
+  & $py.Source -I "<this-skill-directory>\scripts\validate_prep.py" "<prep-directory>"
+} else {
+  'PYTHON_UNAVAILABLE'
+}
+```
+
+On Windows, write `<this-skill-directory>` as a native path such as `C:/Users/...`.
+
+- If it prints validator output (starting with `OK` or `FAIL`), fix the reported problems and
+  rerun the same snippet until it prints `OK`.
+- If it prints `PYTHON_UNAVAILABLE` or anything else, such as `No installed Python found!`, do
+  not install Python. Instead, go through the structural items of the completion checklist
+  item by item for every file, fix each gap, and report that validation was done manually.
 
 ## Import into ExtraBrain
 
@@ -132,8 +189,10 @@ except `--version`; results use the envelope
 
    ```sh
    extrabrain --json documents import --group "<Interview title> interview prep" -- \
-     "/abs/path/00-<interview-slug>-brief.md" "/abs/path/01-<interview-slug>-<topic-slug>.md" ...
+     "<prep-directory>/00-<interview-slug>-brief.md" "<prep-directory>/01-<interview-slug>-<topic-slug>.md" ...
    ```
+
+   In PowerShell, write the command on one line.
 
 4. Check every file result. Exit code `6` is a partial import: resume with the returned resume
    ID rather than starting a new import; ignore the resume ID when every file succeeded. The
