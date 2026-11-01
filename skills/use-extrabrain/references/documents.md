@@ -25,8 +25,10 @@ extrabrain --json documents status --item <item-id>
 extrabrain --json documents list
 ```
 
-Use IDs returned by the import. Inspect every file result and the extraction/indexing status;
-an accepted transfer alone does not establish that a document is ready for search.
+Use IDs returned by the import. Inspect every file result and each document's `extractionStatus`.
+An accepted transfer alone does not make a document ready for search. It is ready only when its
+status is `indexed`. `pending` and `processing` are still running, and `failed` or `cancelled`
+means it is not usable; read `extractionError` to see why.
 
 The current CLI accepts UTF-8 `.txt`, `.md`, and `.pdf` files, up to 10 MiB per file and
 20 files per batch. It rejects symlinks and non-regular files. Quote paths and use `--` to

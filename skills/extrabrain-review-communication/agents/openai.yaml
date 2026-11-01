@@ -1,6 +1,6 @@
 interface:
   display_name: "ExtraBrain Review Communication"
-  short_description: "Improve meeting communication"
+  short_description: "See how clearly you communicated"
   default_prompt: "Use $extrabrain-review-communication to review how I communicated in my latest completed session."
 
 policy:
