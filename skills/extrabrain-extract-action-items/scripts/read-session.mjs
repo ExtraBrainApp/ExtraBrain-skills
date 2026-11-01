@@ -26,7 +26,8 @@ const isSnapshotConflict = (status, message) => status === 5 || /snapshot/i.test
 const cli = (args, { retryConflict = false } = {}) => {
   const result = spawnSync('extrabrain', ['--json', ...args], {
     encoding: 'utf8',
-    maxBuffer: 64 * 1024 * 1024
+    maxBuffer: 64 * 1024 * 1024,
+    windowsHide: true // no console window flashes when the agent runs as a desktop app on Windows
   })
   if (result.error) {
     fail(
@@ -96,6 +97,15 @@ const find = (words) => {
   process.stdout.write(lines.join('\n') + '\n')
 }
 
+// Windows antivirus and indexers can hold a just-written file for a moment, so retry the delete.
+const removeQuietly = (path) => {
+  try {
+    rmSync(path, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 })
+  } catch {
+    // Leave it to the OS temp cleanup rather than fail a finished read.
+  }
+}
+
 const readJsonl = (file) =>
   existsSync(file)
     ? readFileSync(file, 'utf8')
@@ -109,7 +119,7 @@ const read = (sessionId, pageNumber) => {
   const meta = cli(['sessions', 'get', sessionId])
   const parent = mkdtempSync(join(tmpdir(), 'extrabrain-session-'))
   // fail() exits the process, which skips finally blocks, so also clean up on exit.
-  process.on('exit', () => rmSync(parent, { recursive: true, force: true }))
+  process.on('exit', () => removeQuietly(parent))
   let dir
   try {
     // The app can drop a read snapshot while an export runs; start a fresh export.
@@ -191,7 +201,7 @@ const read = (sessionId, pageNumber) => {
     )
     process.stdout.write(out.join('\n') + '\n')
   } finally {
-    rmSync(parent, { recursive: true, force: true })
+    removeQuietly(parent)
   }
 }
 

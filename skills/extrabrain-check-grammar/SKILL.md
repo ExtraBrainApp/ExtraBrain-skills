@@ -15,8 +15,8 @@ Find the corrections that would most improve how the user speaks English, using 
 
 Work through these in order. Tell the user in one short line what you are doing before a long read.
 
-1. **Pick the session.** Run `node <this-skill-dir>/scripts/read-session.mjs find <words from the user's request>`, or `find` with no words for "latest". If exactly one session clearly matches, use it. If several match, show at most 5 as `1. Title — date · length`, ask which one, and stop.
-2. **Read the whole session.** Run `node <this-skill-dir>/scripts/read-session.mjs read <session-id>`. Keep running the `--- More` command it prints until you reach `--- End of transcript.` Read every page, because the most useful pattern is often the one that repeats across the whole session.
+1. **Pick the session.** Run `node "<this-skill-dir>/scripts/read-session.mjs" find <words from the user's request>`, or `find` with no words for "latest". If exactly one session clearly matches, use it. If several match, show at most 5 as `1. Title — date · length`, ask which one, and stop.
+2. **Read the whole session.** Run `node "<this-skill-dir>/scripts/read-session.mjs" read <session-id>`. Keep running the `--- More` command it prints until you reach `--- End of transcript.` Read every page, because the most useful pattern is often the one that repeats across the whole session.
 3. **Collect candidates** from "You" lines only. Look for:
    - wrong verb forms or tense
    - agreement errors

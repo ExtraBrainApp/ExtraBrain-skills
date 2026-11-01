@@ -17,8 +17,8 @@ Review how the user answered in one recorded interview, and give feedback specif
 
 Work through these in order. Tell the user in one short line what you are doing before a long read.
 
-1. **Pick the session.** Run `node <this-skill-dir>/scripts/read-session.mjs find <words from the user's request>`, or `find` with no words for "latest". If exactly one interview clearly matches, use it. If several match, show at most 5 as `1. Title — date · length`, ask which one, and stop.
-2. **Read the whole session.** Run `node <this-skill-dir>/scripts/read-session.mjs read <session-id>`. Keep running the `--- More` command it prints until you reach `--- End of transcript.` The app's detected questions at the top help you map the interview, but the transcript is the evidence.
+1. **Pick the session.** Run `node "<this-skill-dir>/scripts/read-session.mjs" find <words from the user's request>`, or `find` with no words for "latest". If exactly one interview clearly matches, use it. If several match, show at most 5 as `1. Title — date · length`, ask which one, and stop.
+2. **Read the whole session.** Run `node "<this-skill-dir>/scripts/read-session.mjs" read <session-id>`. Keep running the `--- More` command it prints until you reach `--- End of transcript.` The app's detected questions at the top help you map the interview, but the transcript is the evidence.
 3. **Map the interview.** List each main question with its start time. Merge follow-up probes into their main question. Note the interview type, such as behavioral, coding or system design, and judge answers by that type's standard.
 4. **Judge each answer** on these points:
    - Did it answer the question asked?

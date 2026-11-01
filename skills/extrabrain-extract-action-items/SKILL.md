@@ -17,11 +17,11 @@ Ground rules:
 
 Work through these in order. Tell the user in one short line what you are doing before a long read.
 
-1. **Pick the session.** Run `node <this-skill-dir>/scripts/read-session.mjs find <words from the user's request>`. Run `find` with no words when the user says "latest" or names no session.
+1. **Pick the session.** Run `node "<this-skill-dir>/scripts/read-session.mjs" find <words from the user's request>`. Run `find` with no words when the user says "latest" or names no session.
    - If exactly one session clearly matches, use it.
    - If several match, show at most 5 as `1. Title — date · length` and ask which one. Then stop.
    - When the user said "latest", choose the newest session that is `completed`.
-2. **Read the whole session.** Run `node <this-skill-dir>/scripts/read-session.mjs read <session-id>`. If the output ends with `--- More`, run the command it prints until you reach `--- End of transcript.` Do not judge anything before you have read every page, because later talk can change or cancel a task.
+2. **Read the whole session.** Run `node "<this-skill-dir>/scripts/read-session.mjs" read <session-id>`. If the output ends with `--- More`, run the command it prints until you reach `--- End of transcript.` Do not judge anything before you have read every page, because later talk can change or cancel a task.
 3. **Find commitments.** Count only "You" lines that state a commitment, accept a task, or agree to an assignment ("Okay, I'll be secondary on-call").
    - Leave out tasks owned by other people.
    - Leave out ideas, brainstorming and open questions.

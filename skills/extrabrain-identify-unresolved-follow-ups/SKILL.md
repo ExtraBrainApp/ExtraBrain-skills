@@ -15,8 +15,8 @@ Find what one ExtraBrain session left open, meaning questions with no answer and
 
 Work through these in order. Tell the user in one short line what you are doing before a long read.
 
-1. **Pick the session.** Run `node <this-skill-dir>/scripts/read-session.mjs find <words from the user's request>`, or `find` with no words for "latest". If exactly one session clearly matches, use it. If several match, show at most 5 as `1. Title — date · length`, ask which one, and stop.
-2. **Read the whole session.** Run `node <this-skill-dir>/scripts/read-session.mjs read <session-id>`. Keep running the `--- More` command it prints until you reach `--- End of transcript.` A question raised early is often answered much later, so do not decide anything before you have read every page.
+1. **Pick the session.** Run `node "<this-skill-dir>/scripts/read-session.mjs" find <words from the user's request>`, or `find` with no words for "latest". If exactly one session clearly matches, use it. If several match, show at most 5 as `1. Title — date · length`, ask which one, and stop.
+2. **Read the whole session.** Run `node "<this-skill-dir>/scripts/read-session.mjs" read <session-id>`. Keep running the `--- More` command it prints until you reach `--- End of transcript.` A question raised early is often answered much later, so do not decide anything before you have read every page.
 3. **List candidates.** Collect questions nobody answered, decisions that were deferred ("let's take it offline", "undecided"), and risks with no owner. The app's detected questions and facts are hints only. The transcript is the evidence.
 4. **Remove settled items.** For each candidate, search the later transcript for an answer, a decision, a done task, or an explicit owner with a date. Settled items go under **Settled later**. Also drop small talk, duplicates and low-impact items.
 5. **Check the draft** before you send it:

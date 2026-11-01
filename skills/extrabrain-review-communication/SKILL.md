@@ -15,8 +15,8 @@ Review how the user communicated in one ExtraBrain session. Look at clarity, spe
 
 Work through these in order. Tell the user in one short line what you are doing before a long read.
 
-1. **Pick the session.** Run `node <this-skill-dir>/scripts/read-session.mjs find <words from the user's request>`, or `find` with no words for "latest". If exactly one session clearly matches, use it. If several match, show at most 5 as `1. Title — date · length`, ask which one, and stop.
-2. **Read the whole session.** Run `node <this-skill-dir>/scripts/read-session.mjs read <session-id>`. Keep running the `--- More` command it prints until you reach `--- End of transcript.` before you judge anything.
+1. **Pick the session.** Run `node "<this-skill-dir>/scripts/read-session.mjs" find <words from the user's request>`, or `find` with no words for "latest". If exactly one session clearly matches, use it. If several match, show at most 5 as `1. Title — date · length`, ask which one, and stop.
+2. **Read the whole session.** Run `node "<this-skill-dir>/scripts/read-session.mjs" read <session-id>`. Keep running the `--- More` command it prints until you reach `--- End of transcript.` before you judge anything.
 3. **Check who "You" is.** Before judging, note the names other speakers use when they reply to or address a "You" line, and any roles the "You" lines claim ("as our CTO", "I run infra"). Two or more different names or roles mean the microphone is shared. In that case, follow **When the microphone is shared** below and do not critique anyone. One name, or no names at all, means a single speaker.
 4. **Find evidence.** Look at how others reacted to the user: questions about what they meant, decisions they unblocked, deferrals ("let's take it offline"), being cut off. Use these reactions to judge:
    - Clarity: was the point clear?
