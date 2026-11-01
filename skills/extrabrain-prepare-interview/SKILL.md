@@ -198,8 +198,9 @@ except `--version`; results use the envelope
    ID rather than starting a new import; ignore the resume ID when every file succeeded. The
    import result includes the group ID. Run `extrabrain --json documents status <batch-id>` to
    confirm transfer, then `extrabrain --json documents list` and filter by that `groupId` to
-   confirm each document has `extractionStatus` `completed`. If any is still pending, recheck a
-   few times over about a minute; report a failed or still-pending document by name.
+   confirm each document has `extractionStatus` `indexed`, which means it is ready for search. If any is
+   still `pending` or `processing`, recheck a few times over about a minute. Report a `failed` or
+   still-pending document by name, with its `extractionError`.
 5. When `indexedSearch` is advertised, search for a distinctive term from the first topic file
    and confirm a result has the new group's `groupId`:
 
@@ -252,14 +253,41 @@ After the user practises or interviews with ExtraBrain recording, the
 
 ## Respond
 
-Reply in the user's language with:
+Reply in the user's language and use this structure. It reads well as rendered Markdown and as raw
+terminal text. Use no tables and no nested bullets, and keep it under about 50 lines. The full answers
+belong in the files, not in the reply.
 
-- One or two sentences on the interview as you understood it, plus any assumptions made.
-- The topic files in order, each with its kind and one line on why it matters.
-- The briefing from "Prepare the user", step 1.
-- The consistency review result (how many errors were fixed), the validation result (script or
-  manual), the local file directory, and the ExtraBrain group name and ID, or the import
-  limitation.
-- The profile setup result and the preparation plan, then the mock interview offer.
+```
+**Interview prep ready · <title>**
+<round type> · <date, if known> · <n> study files · added to ExtraBrain as "<group name>"
 
-Keep the reply focused; the full answers belong in the imported documents.
+What I assumed: <one or two sentences on the interview as you understood it, and any assumptions>
+
+Study files (in <prep-directory>)
+1. `<file name>` · <kind> · <why it matters, in one line>
+2. ...
+
+Your briefing
+- **<topic>** · have ready: <2 or 3 points>. Hardest question: "<question>"
+
+Practice plan
+- <2 to 4 concrete steps until the interview, most important first>
+
+Checks
+- Consistency review: fixed <n> contradictions, or found none
+- Structure check: passed with the validator script, or checked by hand
+- Research limits: <only if needed: which claims are unconfirmed, outdated or from anonymous reports>
+- ExtraBrain: <k> of <n> files imported and ready for search in "<group name>", or what failed and how to import the files by hand
+- Profile: "<profile>" pinned for the interview (run `extrabrain --json profiles auto` afterwards), or why it was not changed
+
+Next, I can:
+- start a mock interview on <the most likely, highest-stakes topic>, one question at a time
+- <one more follow-up that fits, for example going deeper on a weak topic>
+- review your real interview afterwards, if you record it in ExtraBrain
+```
+
+Rules for the reply:
+
+- Leave out "What I assumed" when you made no assumptions, and "Research limits" when every key claim has a reliable source.
+- In the ExtraBrain line, use the group's name and never its internal ID. If the import or profile step was skipped, say so in that line, with the reason.
+- If the user can reply, end with the mock interview offer. If the run is non-interactive, keep the offer as the first **Next, I can** item.

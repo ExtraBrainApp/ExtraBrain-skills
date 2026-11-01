@@ -61,6 +61,8 @@ npx skills add ExtraBrainApp/ExtraBrain-skills --list
 
 These four skills read a session you recorded in ExtraBrain and write a short report in your assistant's chat. They only read your data. They never change it, and the reports are not saved back into ExtraBrain.
 
+Each report opens with the session's title, date and length and says how much of it was read. Each finding gives a time from the recording, such as `21:08`, so you can find it. The report ends with what the assistant can do for you next. These skills use Node.js, which you already have from the install step, to read the session through the command-line tool.
+
 | Skill | What it does for you |
 | --- | --- |
 | `extrabrain-check-grammar` | Finds up to 10 of the most useful grammar, phrasing, and word-choice improvements in what you said, with a better version of each. |
@@ -86,6 +88,8 @@ These four skills read a session you recorded in ExtraBrain and write a short re
 | Skill | What it does for you |
 | --- | --- |
 | `use-extrabrain` | Lets your assistant add, search, read, export, and delete the reference documents that ExtraBrain uses, and update the command-line tool. |
+
+All skills reply in the same plain layout, so their replies read well in any assistant, including plain terminals. The first line gives the outcome, followed by short bullets and a **Next, I can** list.
 
 ## Good to know
 

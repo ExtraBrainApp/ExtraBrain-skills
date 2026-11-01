@@ -47,6 +47,36 @@ document extractor to bypass the CLI.
 If the CLI or app API is unavailable, explain the reported limitation. For file imports,
 the user can use Settings > Personalization > Reference Documents and the native file picker.
 
+## Report back
+
+A document is ready for search when its `extractionStatus` is `indexed`. While it is `pending` or `processing`, recheck a few times over about a minute. `failed` or `cancelled` means it is not usable; report its `extractionError`.
+
+End every task with a short reply that reads well as rendered Markdown and as raw terminal text:
+
+- Lead with the outcome in one bold line.
+- Then give one flat bullet per item.
+- Then give a **Next, I can:** block with 2 or 3 follow-ups that fit.
+- Use no tables and no nested bullets.
+- Use file names and the document names the app shows. Never use internal IDs, revisions or index generations.
+
+Import:
+
+```
+**Imported 4 of 5 files into "Acme onboarding"**
+- security-requirements.md · ready
+- escalation-policy.pdf · ready
+Not imported
+- contract-draft.docx · .docx is not supported. Save it as PDF, Markdown or text and I can add it.
+
+Next, I can:
+- answer a question from these documents
+- add more files to this group
+```
+
+Questions about documents: answer first in a few bullets. Then add one line, `Sources: <document name> (<file name>), ...`. Say plainly when the documents do not contain the answer. Do not fill the gap from general knowledge without labeling it.
+
+Delete: one line naming the document. Confirm it is gone from the list, and add that the user's own file on disk was not touched.
+
 ## Update the CLI
 
 When the user asks to update the CLI, run `extrabrain update`, then check
