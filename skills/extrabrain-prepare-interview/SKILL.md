@@ -210,7 +210,7 @@ except `--version`; results use the envelope
 
 To add files to the same interview later, import with `--group-id <group-id>`.
 
-If the CLI is missing, the app is not running (exit code `3`), or a capability is not
+If the CLI is missing, a connection failure remains after the recovery steps below (exit code `3`), or a capability is not
 advertised, still deliver the files and tell the user to import them together in
 Settings > Personalization > Reference Documents. Do not access ExtraBrain's database or files
 directly.
@@ -291,3 +291,25 @@ Rules for the reply:
 - Leave out "What I assumed" when you made no assumptions, and "Research limits" when every key claim has a reliable source.
 - In the ExtraBrain line, use the group's name and never its internal ID. If the import or profile step was skipped, say so in that line, with the reason.
 - If the user can reply, end with the mock interview offer. If the run is non-interactive, keep the offer as the first **Next, I can** item.
+
+## Recover a local connection
+
+Exit `3` means the CLI could not connect; it does not prove that ExtraBrain is stopped.
+For `LOCAL_ACCESS_BLOCKED`, or an ambiguous exit `3` from an older CLI running in a
+restricted agent shell, request localhost access through the host agent's normal
+permission mechanism and retry the same read-only command once after approval.
+In Codex, use the execution tool's permission escalation for that command. Do not
+ask the user to rewrite their prompt, use sudo, change security settings, or retry
+when host policy denies permission. If permission is unavailable or denied, explain
+that local access is blocked and stop.
+
+For `CONNECTION_REFUSED`, check that ExtraBrain is open, MCP is enabled, and
+`EXTRABRAIN_PORT` matches the app's configured port. Refusal alone is not proof the
+process is stopped. For `REQUEST_TIMEOUT`, retry a read once, then report the timeout.
+For `CONNECTION_FAILED`, report that reachability is inconclusive; if running in a
+restricted shell, use the single permission-assisted read retry above.
+
+After recovery, continue the original task. Preserve complete transcript retrieval;
+a bounded MCP excerpt cannot replace reading the whole session. Never automatically
+replay imports, updates, deletes, or other mutations after a connection failure:
+first inspect their status and follow the command's existing resume/idempotency rules.

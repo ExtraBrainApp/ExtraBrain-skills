@@ -90,7 +90,7 @@ Do not retry automatically with a newer revision.
 | `0` | Successful command; inspect its data and verify mutations. |
 | `1` | Read the failure message and resolve its cause before retrying. |
 | `2` | Check `extrabrain --help` and correct the arguments. |
-| `3` | ExtraBrain is not reachable. Have the user start it and enable MCP in Settings. |
+| `3` | Connection unavailable. Follow SKILL.md connection recovery; distinguish host permission denial from app/MCP/port problems. |
 | `4` | The app or CLI predates URL-only access. Have the user update both. |
 | `5` | Refresh metadata/status and resolve the reported conflict before retrying. |
 | `6` | Inspect every file result; resume only the same import intent. |

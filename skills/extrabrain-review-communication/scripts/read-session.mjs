@@ -49,7 +49,7 @@ const cli = (args, { retryConflict = false } = {}) => {
       : /not found/i.test(body.message)
       ? ' Run `find` to list sessions and their ids.'
       : result.status === 3
-        ? ' Start the ExtraBrain app and turn on MCP in Settings, then try again.'
+        ? ` Connection recovery required (${body.data?.error ?? 'CONNECTION_UNAVAILABLE'}). Follow the skill connection-recovery instructions; this does not prove the app is stopped.`
         : result.status === 8
           ? ' Update the ExtraBrain app; this version cannot share sessions yet.'
           : ''
