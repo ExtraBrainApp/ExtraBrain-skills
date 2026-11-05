@@ -106,24 +106,12 @@ Next, I can:
 
 ## Recover a local connection
 
-Exit `3` means the CLI could not connect; it does not prove that ExtraBrain is stopped.
-For `LOCAL_ACCESS_BLOCKED`, or an ambiguous exit `3` from an older CLI running in a
-restricted agent shell, request localhost access through the host agent's normal
-permission mechanism and retry the same read-only command once after approval.
-In Codex, use the execution tool's permission escalation for that command. Do not
-ask the user to rewrite their prompt, use sudo, change security settings, or retry
-when host policy denies permission. If permission is unavailable or denied, explain
-that local access is blocked and stop.
+On exit `3`, use `data.error`:
 
-For `CLI_ACCESS_DISABLED`, ask the user to enable CLI access in ExtraBrain Settings > Agent Skills.
-Do not enable MCP as a prerequisite: the CLI uses HTTP API routes independently of MCP.
-For `CONNECTION_REFUSED`, check that ExtraBrain is open, CLI access is enabled, and
-`EXTRABRAIN_PORT` matches the app's configured port. Refusal alone is not proof the
-process is stopped. For `REQUEST_TIMEOUT`, retry a read once, then report the timeout.
-For `CONNECTION_FAILED`, report that reachability is inconclusive; if running in a
-restricted shell, use the single permission-assisted read retry above.
+- `LOCAL_ACCESS_BLOCKED`: request localhost access through the host's permission flow (Codex: escalate the command), then retry the same read-only command once after approval. Stop if permission is denied or unavailable.
+- `CLI_ACCESS_DISABLED`: ask the user to enable CLI access in Settings > Agent Skills. MCP can stay off.
+- `CONNECTION_REFUSED`: check that ExtraBrain is open, CLI access is enabled, and `EXTRABRAIN_PORT` matches the app.
+- `REQUEST_TIMEOUT`: retry a read once, then report the timeout.
+- `CONNECTION_FAILED`: report the connection error.
 
-After recovery, continue the original task. Preserve complete transcript retrieval;
-a bounded MCP excerpt cannot replace reading the whole session. Never automatically
-replay imports, updates, deletes, or other mutations after a connection failure:
-first inspect their status and follow the command's existing resume/idempotency rules.
+After recovery, resume the original task. Read complete transcripts; bounded MCP excerpts are not a substitute. Never automatically replay mutations; inspect their status and follow the command's resume/idempotency rules.

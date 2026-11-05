@@ -14,4 +14,4 @@ Use this only when `node` is not available. Run every command with `--json`. The
 
 Show times as `mm:ss` from the start of the session.
 
-On exit `3`, follow the connection-recovery section in SKILL.md, including its single permission-assisted read retry.
+On exit `3`, follow the `data.error` recovery instructions in SKILL.md.
