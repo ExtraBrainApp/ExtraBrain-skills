@@ -19,8 +19,8 @@ Use the first-party `extrabrain` CLI for reference documents, capability discove
    `data.apiVersion` is `v1`, `data.available` is true, and `data.capabilities` advertises the
    required operation. Read [references/documents.md](references/documents.md) for the mapping,
    commands, and recovery steps.
-3. ExtraBrain must already be running with MCP enabled in Settings; that switch starts the
-   local listener the CLI uses. ExtraBrain requires no pairing or token; the agent host may require permission to access localhost.
+3. ExtraBrain must already be running with CLI access enabled in Settings > Agent Skills.
+   The CLI uses the local HTTP API independently of MCP; MCP can remain disabled. ExtraBrain requires no pairing or token; the agent host may require permission to access localhost.
 
 Use `--json` for command results. The exit code and per-file statuses determine success;
 a partial import is not a completed import.
@@ -95,7 +95,9 @@ ask the user to rewrite their prompt, use sudo, change security settings, or ret
 when host policy denies permission. If permission is unavailable or denied, explain
 that local access is blocked and stop.
 
-For `CONNECTION_REFUSED`, check that ExtraBrain is open, MCP is enabled, and
+For `CLI_ACCESS_DISABLED`, ask the user to enable CLI access in ExtraBrain Settings > Agent Skills.
+Do not enable MCP as a prerequisite: the CLI uses HTTP API routes independently of MCP.
+For `CONNECTION_REFUSED`, check that ExtraBrain is open, CLI access is enabled, and
 `EXTRABRAIN_PORT` matches the app's configured port. Refusal alone is not proof the
 process is stopped. For `REQUEST_TIMEOUT`, retry a read once, then report the timeout.
 For `CONNECTION_FAILED`, report that reachability is inconclusive; if running in a

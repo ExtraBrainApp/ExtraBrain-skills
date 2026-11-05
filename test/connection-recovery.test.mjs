@@ -7,7 +7,7 @@ import { spawnSync } from 'node:child_process'
 
 const skills = readdirSync('skills').filter(name => existsSync(`skills/${name}/scripts/read-session.mjs`))
 for (const skill of skills) {
-  for (const error of ['LOCAL_ACCESS_BLOCKED', 'CONNECTION_REFUSED', undefined]) {
+  for (const error of ['LOCAL_ACCESS_BLOCKED', 'CONNECTION_REFUSED', 'CLI_ACCESS_DISABLED', undefined]) {
     test(`${skill}: preserves ${error ?? 'legacy'} recovery without retrying itself`, () => {
       const dir = mkdtempSync(join(tmpdir(), 'skill-cli-'))
       try {

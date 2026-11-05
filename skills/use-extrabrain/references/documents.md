@@ -3,8 +3,9 @@
 ## Capabilities
 
 Read `extrabrain --json capabilities` before document work and confirm the capability each
-command needs in `data.capabilities`. The CLI needs no pairing, token, or approval; it works
-whenever ExtraBrain is running with MCP enabled in Settings.
+command needs in `data.capabilities`. ExtraBrain requires no pairing or token; the agent host
+may require permission to access localhost. Enable CLI access in Settings > Agent Skills.
+MCP can remain disabled.
 
 | Commands | Required capability |
 | --- | --- |
@@ -90,7 +91,7 @@ Do not retry automatically with a newer revision.
 | `0` | Successful command; inspect its data and verify mutations. |
 | `1` | Read the failure message and resolve its cause before retrying. |
 | `2` | Check `extrabrain --help` and correct the arguments. |
-| `3` | Connection unavailable. Follow SKILL.md connection recovery; distinguish host permission denial from app/MCP/port problems. |
+| `3` | Connection unavailable. Follow SKILL.md connection recovery; distinguish host permission denial from app/CLI-access/port problems. |
 | `4` | The app or CLI predates URL-only access. Have the user update both. |
 | `5` | Refresh metadata/status and resolve the reported conflict before retrying. |
 | `6` | Inspect every file result; resume only the same import intent. |
@@ -98,5 +99,5 @@ Do not retry automatically with a newer revision.
 | `8` | The API, capability, document, text, or original may be unavailable. Follow the specific error. |
 
 The CLI connects to `127.0.0.1:37373` by default. Set `EXTRABRAIN_PORT` only when the app is
-configured to use another local port. The CLI does not start the app. While MCP is off, the app
+configured to use another local port. The CLI does not start the app. While CLI access is off, the app
 cannot serve CLI document commands; use the app's native import UI when appropriate.

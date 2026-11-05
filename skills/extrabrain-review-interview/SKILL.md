@@ -115,7 +115,9 @@ ask the user to rewrite their prompt, use sudo, change security settings, or ret
 when host policy denies permission. If permission is unavailable or denied, explain
 that local access is blocked and stop.
 
-For `CONNECTION_REFUSED`, check that ExtraBrain is open, MCP is enabled, and
+For `CLI_ACCESS_DISABLED`, ask the user to enable CLI access in ExtraBrain Settings > Agent Skills.
+Do not enable MCP as a prerequisite: the CLI uses HTTP API routes independently of MCP.
+For `CONNECTION_REFUSED`, check that ExtraBrain is open, CLI access is enabled, and
 `EXTRABRAIN_PORT` matches the app's configured port. Refusal alone is not proof the
 process is stopped. For `REQUEST_TIMEOUT`, retry a read once, then report the timeout.
 For `CONNECTION_FAILED`, report that reachability is inconclusive; if running in a
