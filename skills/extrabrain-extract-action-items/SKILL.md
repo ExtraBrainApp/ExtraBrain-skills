@@ -35,7 +35,7 @@ Work through these in order. Tell the user in one short line what you are doing 
    - Nothing appears twice.
 6. **Reply** using the format below.
 
-If the script prints `ERROR:`, tell the user what it says in plain words and stop. Do not guess and do not use another data source. If `node` is missing, read [references/cli-fallback.md](references/cli-fallback.md).
+If the script exits with code `3`, follow **Recover a local connection** below before stopping. For other `ERROR:` results, tell the user what it says in plain words and stop. Do not guess and do not use another data source. If `node` is missing, read [references/cli-fallback.md](references/cli-fallback.md).
 
 ## Output format
 
@@ -98,3 +98,15 @@ Next, I can:
 - draft the email to Acme for item 1
 - list what is still undecided in this meeting
 ```
+
+## Recover a local connection
+
+On exit `3`, check `data.error`:
+
+- `LOCAL_ACCESS_BLOCKED`: your host blocked the connection. Ask for permission the way your host normally does (in Codex, escalate the command), then retry the same read-only command once. Stop if permission is denied or unavailable.
+- `CLI_ACCESS_DISABLED`: ask the user to turn on CLI access in ExtraBrain under Settings > Agent Skills.
+- `CONNECTION_REFUSED`: ask the user to check that ExtraBrain is open and CLI access is on. If `EXTRABRAIN_PORT` is set, check that it matches the app.
+- `REQUEST_TIMEOUT`: retry a read once, then tell the user ExtraBrain took too long to respond.
+- `CONNECTION_FAILED`: tell the user ExtraBrain could not be reached.
+
+Once connected, continue the original task. Read the whole transcript; short excerpts from other tools are not enough. Never repeat a change automatically: check whether it went through, then follow the command's resume and retry rules.

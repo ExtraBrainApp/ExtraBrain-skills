@@ -13,3 +13,5 @@ Use this only when `node` is not available. Run every command with `--json`. The
 5. `extrabrain --json sessions questions <session-id>` and `extrabrain --json sessions facts <session-id>` hold the questions and facts the app detected. Treat them as hints. The transcript is the evidence.
 
 Show times as `mm:ss` from the start of the session.
+
+On exit `3`, follow the `data.error` recovery instructions in SKILL.md.

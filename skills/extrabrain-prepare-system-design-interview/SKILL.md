@@ -195,7 +195,7 @@ Use `--json` for every CLI command except `--version`; results use the envelope
    extrabrain --json documents search --limit 10 "<key term>"
    ```
 
-If the CLI is missing, the app is not running (exit code `3`), or a capability is not
+If the CLI is missing, a connection failure remains after the recovery steps below (exit code `3`), or a capability is not
 advertised, still deliver the files and tell the user to import them in
 Settings > Personalization > Reference Documents. Do not access ExtraBrain's database or files
 directly.
@@ -276,3 +276,15 @@ Rules for the reply:
 - Leave out "What I assumed" when you made no assumptions, and "Research limits" when every key claim has a reliable source.
 - In the ExtraBrain line, use the group's name and never its internal ID. If the import or profile step was skipped, say so in that line, with the reason.
 - If the user can reply, end with the mock interview offer. If the run is non-interactive, keep the offer as the first **Next, I can** item.
+
+## Recover a local connection
+
+On exit `3`, check `data.error`:
+
+- `LOCAL_ACCESS_BLOCKED`: your host blocked the connection. Ask for permission the way your host normally does (in Codex, escalate the command), then retry the same read-only command once. Stop if permission is denied or unavailable.
+- `CLI_ACCESS_DISABLED`: ask the user to turn on CLI access in ExtraBrain under Settings > Agent Skills.
+- `CONNECTION_REFUSED`: ask the user to check that ExtraBrain is open and CLI access is on. If `EXTRABRAIN_PORT` is set, check that it matches the app.
+- `REQUEST_TIMEOUT`: retry a read once, then tell the user ExtraBrain took too long to respond.
+- `CONNECTION_FAILED`: tell the user ExtraBrain could not be reached.
+
+Once connected, continue the original task. Read the whole transcript; short excerpts from other tools are not enough. Never repeat a change automatically: check whether it went through, then follow the command's resume and retry rules.
