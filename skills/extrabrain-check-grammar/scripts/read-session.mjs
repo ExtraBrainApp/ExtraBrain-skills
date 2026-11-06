@@ -23,6 +23,19 @@ const fail = (message, code = 1) => {
 
 const isSnapshotConflict = (status, message) => status === 5 || /snapshot/i.test(message ?? '')
 
+const errorHint = (status, body) => {
+  if (isSnapshotConflict(status, body.message)) {
+    return ' ExtraBrain is busy with other reads right now. Wait a minute and try again.'
+  }
+  if (/not found/i.test(body.message)) return ' Run `find` to list sessions and their ids.'
+  if (status === 3) {
+    const error = body.data?.error ?? 'CONNECTION_UNAVAILABLE'
+    return ` Connection recovery required (${error}). Follow the skill connection-recovery instructions; this does not prove the app is stopped.`
+  }
+  if (status === 8) return ' Update the ExtraBrain app; this version cannot share sessions yet.'
+  return ''
+}
+
 const cli = (args, { retryConflict = false } = {}) => {
   const result = spawnSync('extrabrain', ['--json', ...args], {
     encoding: 'utf8',
@@ -44,15 +57,7 @@ const cli = (args, { retryConflict = false } = {}) => {
   }
   if (result.status !== 0 || body.code !== 0) {
     if (retryConflict && isSnapshotConflict(result.status, body.message)) return null
-    const hint = isSnapshotConflict(result.status, body.message)
-      ? ' ExtraBrain is busy with other reads right now. Wait a minute and try again.'
-      : /not found/i.test(body.message)
-      ? ' Run `find` to list sessions and their ids.'
-      : result.status === 3
-        ? ` Connection recovery required (${body.data?.error ?? 'CONNECTION_UNAVAILABLE'}). Follow the skill connection-recovery instructions; this does not prove the app is stopped.`
-        : result.status === 8
-          ? ' Update the ExtraBrain app; this version cannot share sessions yet.'
-          : ''
+    const hint = errorHint(result.status, body)
     fail(`extrabrain ${args.join(' ')} failed (exit ${result.status}): ${body.message}.${hint}`, result.status || 1)
   }
   return body.data
