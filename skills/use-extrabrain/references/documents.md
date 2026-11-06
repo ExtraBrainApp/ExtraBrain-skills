@@ -3,9 +3,8 @@
 ## Capabilities
 
 Read `extrabrain --json capabilities` before document work and confirm the capability each
-command needs in `data.capabilities`. ExtraBrain requires no pairing or token; the agent host
-may require permission to access localhost. Enable CLI access in Settings > Agent Skills.
-MCP can remain disabled.
+command needs in `data.capabilities`. CLI access must be on in Settings > Agent Skills.
+ExtraBrain needs no pairing or token, but your host may need permission to connect to it.
 
 | Commands | Required capability |
 | --- | --- |

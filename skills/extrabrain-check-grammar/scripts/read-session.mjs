@@ -30,7 +30,7 @@ const errorHint = (status, body) => {
   if (/not found/i.test(body.message)) return ' Run `find` to list sessions and their ids.'
   if (status === 3) {
     const error = body.data?.error ?? 'CONNECTION_UNAVAILABLE'
-    return ` Connection recovery required (${error}). Follow the skill connection-recovery instructions; this does not prove the app is stopped.`
+    return ` Could not connect to ExtraBrain (${error}). Follow "Recover a local connection" in SKILL.md.`
   }
   if (status === 8) return ' Update the ExtraBrain app; this version cannot share sessions yet.'
   return ''
@@ -58,7 +58,7 @@ const cli = (args, { retryConflict = false } = {}) => {
   if (result.status !== 0 || body.code !== 0) {
     if (retryConflict && isSnapshotConflict(result.status, body.message)) return null
     const hint = errorHint(result.status, body)
-    fail(`extrabrain ${args.join(' ')} failed (exit ${result.status}): ${body.message}.${hint}`, result.status || 1)
+    fail(`extrabrain ${args.join(' ')} failed (exit ${result.status}): ${body.message.replace(/\.$/, '')}.${hint}`, result.status || 1)
   }
   return body.data
 }

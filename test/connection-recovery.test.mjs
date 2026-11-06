@@ -53,11 +53,11 @@ for (const skill of scriptSkills) {
   for (const error of ['LOCAL_ACCESS_BLOCKED', 'CONNECTION_REFUSED', 'CLI_ACCESS_DISABLED', undefined]) {
     test(`${skill}: preserves ${error ?? 'legacy'} recovery without retrying itself`, () => {
       const data = error ? { error } : null
-      const result = runWithFakeCli(skill, failingCli(3, { data, message: 'connection unavailable' }))
+      const result = runWithFakeCli(skill, failingCli(3, { data, message: 'Connection unavailable.' }))
       assert.equal(result.status, 3)
-      assert.match(result.stdout, /Connection recovery required/)
+      assert.match(result.stdout, /Could not connect to ExtraBrain/)
       assert.match(result.stdout, new RegExp(error ?? 'CONNECTION_UNAVAILABLE'))
-      assert.doesNotMatch(result.stdout, /Start the ExtraBrain app/)
+      assert.doesNotMatch(result.stdout, /Start the ExtraBrain app|\.\./)
     })
   }
 
