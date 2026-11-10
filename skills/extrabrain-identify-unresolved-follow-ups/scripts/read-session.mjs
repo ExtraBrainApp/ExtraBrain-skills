@@ -23,6 +23,19 @@ const fail = (message, code = 1) => {
 
 const isSnapshotConflict = (status, message) => status === 5 || /snapshot/i.test(message ?? '')
 
+const errorHint = (status, body) => {
+  if (isSnapshotConflict(status, body.message)) {
+    return ' ExtraBrain is busy with other reads right now. Wait a minute and try again.'
+  }
+  if (/not found/i.test(body.message)) return ' Run `find` to list sessions and their ids.'
+  if (status === 3) {
+    const error = body.data?.error ?? 'CONNECTION_UNAVAILABLE'
+    return ` Could not connect to ExtraBrain (${error}). Follow "Recover a local connection" in SKILL.md.`
+  }
+  if (status === 8) return ' Update the ExtraBrain app; this version cannot share sessions yet.'
+  return ''
+}
+
 const cli = (args, { retryConflict = false } = {}) => {
   const result = spawnSync('extrabrain', ['--json', ...args], {
     encoding: 'utf8',
@@ -44,16 +57,8 @@ const cli = (args, { retryConflict = false } = {}) => {
   }
   if (result.status !== 0 || body.code !== 0) {
     if (retryConflict && isSnapshotConflict(result.status, body.message)) return null
-    const hint = isSnapshotConflict(result.status, body.message)
-      ? ' ExtraBrain is busy with other reads right now. Wait a minute and try again.'
-      : /not found/i.test(body.message)
-      ? ' Run `find` to list sessions and their ids.'
-      : result.status === 3
-        ? ' Start the ExtraBrain app and turn on MCP in Settings, then try again.'
-        : result.status === 8
-          ? ' Update the ExtraBrain app; this version cannot share sessions yet.'
-          : ''
-    fail(`extrabrain ${args.join(' ')} failed (exit ${result.status}): ${body.message}.${hint}`, result.status || 1)
+    const hint = errorHint(result.status, body)
+    fail(`extrabrain ${args.join(' ')} failed (exit ${result.status}): ${body.message.replace(/\.$/, '')}.${hint}`, result.status || 1)
   }
   return body.data
 }

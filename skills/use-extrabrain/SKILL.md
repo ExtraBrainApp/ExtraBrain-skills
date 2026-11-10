@@ -19,8 +19,8 @@ Use the first-party `extrabrain` CLI for reference documents, capability discove
    `data.apiVersion` is `v1`, `data.available` is true, and `data.capabilities` advertises the
    required operation. Read [references/documents.md](references/documents.md) for the mapping,
    commands, and recovery steps.
-3. ExtraBrain must already be running with MCP enabled in Settings; that switch starts the
-   local listener the CLI uses. The CLI needs no pairing, token, or approval.
+3. ExtraBrain must be open with CLI access turned on in Settings > Agent Skills. It needs no
+   pairing or token, but your host may need permission to connect to it.
 
 Use `--json` for command results. The exit code and per-file statuses determine success;
 a partial import is not a completed import.
@@ -83,3 +83,15 @@ When the user asks to update the CLI, run `extrabrain update`, then check
 `extrabrain --version` as a separate command. On Windows the update finishes just after
 `extrabrain update` exits, so never chain the two in one command. This updates the standalone
 command. Use the app UI for desktop application updates.
+
+## Recover a local connection
+
+On exit `3`, check `data.error`:
+
+- `LOCAL_ACCESS_BLOCKED`: your host blocked the connection. Ask for permission the way your host normally does (in Codex, escalate the command), then retry the same read-only command once. Stop if permission is denied or unavailable.
+- `CLI_ACCESS_DISABLED`: ask the user to turn on CLI access in ExtraBrain under Settings > Agent Skills.
+- `CONNECTION_REFUSED`: ask the user to check that ExtraBrain is open and CLI access is on. If `EXTRABRAIN_PORT` is set, check that it matches the app.
+- `REQUEST_TIMEOUT`: retry a read once, then tell the user ExtraBrain took too long to respond.
+- `CONNECTION_FAILED`: tell the user ExtraBrain could not be reached.
+
+Once connected, continue the original task. Read the whole transcript; short excerpts from other tools are not enough. Never repeat a change automatically: check whether it went through, then follow the command's resume and retry rules.

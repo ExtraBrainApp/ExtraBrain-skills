@@ -8,7 +8,7 @@ A skill is a small set of instructions that teaches your AI assistant how to do 
 
 ## What you need
 
-1. **The ExtraBrain app**, installed and running on your computer. Get it at [extrabrain.app](https://extrabrain.app).
+1. **The ExtraBrain app**, installed and running on your computer, with **CLI access** turned on in Settings > Agent Skills. Get the app at [extrabrain.app](https://extrabrain.app).
 2. **An AI assistant that supports skills**, such as Claude Code or Codex.
 3. **The ExtraBrain command-line tool.** Your assistant uses it to talk to the app. It is installed with one command in "How to install" below. It works on Mac (Apple Silicon and Intel) and on Windows 10 and 11 (Intel/AMD and ARM).
 4. **Node.js**, which provides the `npx` command used in the install step below. Get it from [nodejs.org](https://nodejs.org).
@@ -94,7 +94,6 @@ All skills reply in the same plain layout, so their replies read well in any ass
 ## Good to know
 
 - The four meeting skills and the interview review skill need a recent version of the ExtraBrain app that supports reading sessions. If your version does not yet, the assistant tells you what is missing.
-- Document features need local document automation turned on in the app. The first time, you approve the connection inside ExtraBrain.
 - If something is missing, your assistant says what it is and does not guess.
 
 Questions or ideas? Visit [extrabrain.app](https://extrabrain.app).
